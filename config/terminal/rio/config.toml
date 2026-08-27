@@ -1,0 +1,67 @@
+hide-cursor-when-typing = false
+theme = "Peppermint"
+working-dir = "C:/Users/almag"
+
+[editor]
+program = "nvim.exe"
+args = []
+
+# Fonts
+[fonts]
+size = 15
+extras = [{ family = "D2CodingLigature Nerd Font Mono" }]
+features = ["ss02", "ss03", "ss05", "ss19"]
+
+[fonts.regular]
+family = "FiraCode Nerd Font Mono"
+style = "Normal"
+weight = 400
+
+[fonts.bold]
+family = "FiraCode Nerd Font Mono"
+style = "Normal"
+weight = 800
+
+[fonts.italic]
+family = "FiraCode Nerd Font Mono"
+style = "Italic"
+weight = 400
+
+[fonts.bold-italic]
+family = "FiraCode Nerd Font Mono"
+style = "Italic"
+weight = 800
+
+[window]
+opacity = 0.75
+#decorations = "Disabled"
+decorations = "Enabled"
+blur = true
+
+[developer]
+log-level = "WARN"
+enable-log-file = true
+
+[renderer]
+backend = "GL"
+
+[shell]
+program = "powershell.exe"
+args = [
+  "-NoExit",
+  "-Command",
+  "&{Import-Module \"\"\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll\"\"\"; Enter-VsDevShell 8b68ffab -SkipAutomaticLocation -DevCmdArguments \"\"\"-arch=x64 -host_arch=x64\"\"\"}; nu.exe",
+]
+
+[binding]
+keys = [
+  { key = "[", with = "control | shift", action = "SelectPrevSplit" },
+  { key = "]", with = "control | shift", action = "SelectNextSplit" },
+  { key = "U", with = "control | shift", action = "CreateTab " },
+]
+
+[platform]
+linux.shell.program = "/bin/fish"
+macos.shell.program = "/bin/fish"
+linux.working-dir = "~"
+macos.working-dir = "~"

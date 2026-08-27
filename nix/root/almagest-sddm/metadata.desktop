@@ -1,0 +1,16 @@
+[SddmGreeterTheme]
+Name=almagest-sddm
+Description=almagest-sddm
+Author=Sungbae Jeong
+Website=https://gitlab.com/e0328eric/arch-almagest
+License=MIT
+Type=sddm-theme
+Version=0.1
+ConfigFile=almagest.conf
+Screenshot=silver-wolf.png
+MainScript=Main.qml
+TranslationsDirectory=translations
+Theme-Id=almagest-sddm
+Theme-API=2.0
+QtVersion=6
+

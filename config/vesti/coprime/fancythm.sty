@@ -1,0 +1,278 @@
+%%==============================================================================
+
+%% This package has a copywrite to Coprime --- Ver 3.00
+%% Email Address : almagest0328@gmail.com
+%
+%% fancythm Package, First Release Date : 2019/09/28
+%
+%% Ver 1.00 : 19/09/28 --- To manage simply, this package was made
+%% Ver 1.01 : 19/11/25 --- Delete cleveref package so that fix a bug of coprime.cls
+%% Ver 2.00 : 22/04/01 --- Remove tcolorbox package to make theorems more simple and cleaner
+%% Ver 2.01 : 22/12/06 --- Fix `proof` environment fancy form
+%% Ver 3.00 : 24/11/01 --- Available to make a custom theorem box
+
+%%==============================================================================
+
+% LaTeX Format and Define a Package Name
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3, xparse, l3keys2e}
+\ProvidesExplPackage {fancythm} {2024/11/01} {3.00} {Copywrite to Coprime}
+
+% Import tcolorbox and etoolbox packages
+\RequirePackage{amsthm}
+\RequirePackage{etoolbox}
+\RequirePackage{varwidth}
+\RequirePackage{aliascnt}
+\RequirePackage{cleveref}
+
+%% Main Stuff
+% Undefine the previous theorems
+\cs_undefine:N \definition
+\cs_undefine:N \theorem
+\cs_undefine:N \proposition
+\cs_undefine:N \lemma
+\cs_undefine:N \corollary
+\cs_undefine:N \proof
+\cs_undefine:N \remark
+\cs_undefine:N \counterexample
+\cs_undefine:N \enddefinition
+\cs_undefine:N \endtheorem
+\cs_undefine:N \endproposition
+\cs_undefine:N \endlemma
+\cs_undefine:N \endcorollary
+\cs_undefine:N \endproof
+\cs_undefine:N \endremark
+\cs_undefine:N \endcounterexample
+
+% Define Booleans
+\newif\ifuse@fancythm
+\newif\ifuse@@fancythm
+\newif\if@isproved
+
+% Proved Box
+\def\@pr@vedb@x{$\Box$}
+\def\@@pr@vedb@x{$\blacksquare$}
+\def\@@@pr@vedb@x{$\blacklozenge$}
+\def\pr@vedb@xfancy#1{{\unskip\nobreak\hfil\penalty50
+	\hfil\phantom{#1}\nobreak\hfil#1
+	\parfillskip=0pt \finalhyphendemerits=0 \par}}
+\def\@pr@ved{\pr@vedb@xfancy\@pr@vedb@x}
+\def\@@pr@ved{\pr@vedb@xfancy\@@pr@vedb@x}
+\def\@@@pr@ved{\pr@vedb@xfancy\@@@pr@vedb@x}
+\newcommand{\@proved}{\ifmmode\tag*{\@pr@vedb@x}\else\@pr@ved\fi}
+\newcommand{\@@proved}{\ifmmode\tag*{\@@pr@vedb@x}\else\@@pr@ved\fi}
+\newcommand{\@@@proved}{\ifmmode\tag*{\@@@pr@vedb@x}\else\@@@pr@ved\fi}
+\NewDocumentCommand{\proved}{ss}{%
+\IfBooleanTF{#1}{\IfBooleanTF{#2}{\@@@proved}{\@@proved}}{\@proved}}
+
+% \fancyon and \fancyoff commands
+\def\fancyon{\use@fancythmtrue}
+\def\fancyoff{\use@fancythmfalse}
+
+\newlength{\thmtitlewidth}
+\newlength{\thmtitlewidthtmp}
+\def\@proof{\relax}
+\theoremstyle{remark}
+\newtheorem*{@pf}{proof}
+\newtheorem*{@counter}{counterexample}
+\newtheorem*{@remark}{remark}
+\newtheoremstyle{named}{\topsep}{\topsep}{\itshape}{}{\bfseries}{.}{.5em}{\thmnumber{#2} \thmnote{#3}}
+\theoremstyle{named}
+\newtheorem{namedthm}{Theorem}[section]
+\theoremstyle{plain}
+
+\newtoks\@counterprefix
+\def\counterprefix#1{\@counterprefix{#1}}
+
+\newcounter{coprimeThmboxcnt}[subsection]\setcounter{coprimeThmboxcnt}{0}
+\def\allocthmcnt#1{\newaliascnt{#1}{coprimeThmboxcnt}%
+\@namedef{the#1}{\the\@counterprefix\arabic{section}.\arabic{subsection}.\arabic{coprimeThmboxcnt}}}
+
+% Dummy counters for cleveref
+\allocthmcnt{coprimeDefinition} \allocthmcnt{coprimeTheorem}
+\allocthmcnt{coprimeProposition} \allocthmcnt{coprimeCorollary} \allocthmcnt{coprimeLemma}
+
+\crefname{coprimeDefinition}{\lowercase{Definition}}{\lowercase{Definition}}
+\Crefname{coprimeDefinition}{Definition}{Definition}
+
+\crefname{coprimeTheorem}{\lowercase{Theorem}}{\lowercase{Theorem}}
+\Crefname{coprimeTheorem}{Theorem}{Theorem}
+
+\crefname{coprimeProposition}{\lowercase{Proposition}}{\lowercase{Proposition}}
+\Crefname{coprimeProposition}{Proposition}{Proposition}
+
+\crefname{coprimeCorollary}{\lowercase{Corollary}}{\lowercase{Corollary}}
+\Crefname{coprimeCorollary}{Corollary}{Corollary}
+
+\crefname{coprimeLemma}{\lowercase{Lemma}}{\lowercase{Lemma}}
+\Crefname{coprimeLemma}{Lemma}{Lemma}
+
+\NewDocumentCommand{\maketheorem}{mmm}{%
+\NewDocumentEnvironment{#1}{o}{%
+	\refstepcounter{#2}
+	\let\proof\@proof
+	\ifuse@fancythm
+	\RenewDocumentCommand{\@proof}{O{}}{%
+		\@isprovedtrue
+		\begin{pf}[####1]
+	}
+	\let\proof\@proof
+	\par
+	\IfNoValueTF{##1}{\def\expl@in{}}{\def\expl@in{\space({##1})}}
+	\@isprovedfalse
+	\settowidth{\thmtitlewidthtmp}{\expl@in}
+	\addtolength{\thmtitlewidth}{1.2323\thmtitlewidthtmp}
+	\settowidth{\thmtitlewidthtmp}{#1 \csname the#1\endcsname}
+	\addtolength{\thmtitlewidth}{1.2323\thmtitlewidthtmp}
+	\addtolength{\thmtitlewidth}{16mm}
+	\par\goodbreak
+	\begingroup
+	\postdisplaypenalty=10000
+	\vskip 1.5ex
+	\hrule height 0.7pt\nobreak
+	\vskip 1.5ex
+	\noindent{#3}{\expl@in}\kern 0.5em
+	\def\proof{%
+		\par\hbox to\hsize{\xleaders\hbox to.8em{\hss-\hss}\hfill}
+		\noindent{\itshape proof.}\kern 1em
+	}
+	\else
+	\IfNoValueTF{##1}{\def\expl@in{}}{\def\expl@in{\space({##1})}}
+	\@isprovedfalse
+	\RenewDocumentCommand{\@proof}{O{}}{%
+		\endgroup
+		\end{flushleft}
+		\@isprovedtrue
+		\begin{pf}[####1]
+	}
+	\let\proof\@proof
+	\begin{flushleft}
+	{#3}{\expl@in}
+	\begingroup
+	\fi
+}
+{%
+	\ifuse@fancythm
+	\if@isproved
+		\end{pf}
+	\else
+		\par\penalty10000
+		\vskip1.5ex
+		\hrule height 0.7pt
+		\endgroup\par
+		\vskip 1.5ex
+		\par
+	\fi
+	\else
+	\if@isproved
+		\end{pf}
+	\else
+	\endgroup
+	\end{flushleft}
+	\fi\fi
+}}
+
+\NewDocumentCommand{\maketheoremEx}{mmmm}{%
+\NewDocumentEnvironment{#1}{o}{%
+	\refstepcounter{#2}
+	\let\proof\@proof
+	\ifuse@fancythm
+	\RenewDocumentCommand{\@proof}{O{}}{%
+		\@isprovedtrue
+		\begin{pf}[####1]
+	}
+	\let\proof\@proof
+	\par
+	\IfNoValueTF{##1}{\def\expl@in{}}{\def\expl@in{\space({##1})}}
+	\@isprovedfalse
+	\settowidth{\thmtitlewidthtmp}{\expl@in}
+	\addtolength{\thmtitlewidth}{1.2323\thmtitlewidthtmp}
+	\settowidth{\thmtitlewidthtmp}{#1 \csname the#1\endcsname}
+	\addtolength{\thmtitlewidth}{1.2323\thmtitlewidthtmp}
+	\addtolength{\thmtitlewidth}{16mm}
+	\par\penalty-50
+	\begingroup
+	\postdisplaypenalty=10000
+	\vskip 1.5ex
+	\hrule height 0.7pt\nobreak
+	\vskip 1.5ex
+	\noindent\IfNoValueTF{##1}{#3}{#4}\kern0.5em
+	\def\proof{%
+		\par\hbox to\hsize{\xleaders\hbox to.8em{\hss-\hss}\hfill}
+		\noindent{\itshape proof.}\kern 1em
+	}
+	\else
+	\@isprovedfalse
+	\RenewDocumentCommand{\@proof}{O{}}{%
+		\endgroup
+		\end{flushleft}
+		\@isprovedtrue
+		\begin{pf}[####1]
+	}
+	\let\proof\@proof
+	\begin{flushleft}
+	\IfNoValueTF{##1}{#3}{#4}
+	\begingroup
+	\fi
+}
+{%
+	\ifuse@fancythm
+	\if@isproved
+		\end{pf}
+	\else
+		\par\penalty10000
+		\vskip1.5ex
+		\hrule height 0.7pt
+		\endgroup\par
+		\vskip 1.5ex
+		\par
+	\fi
+	\else
+	\if@isproved
+		\end{pf}
+	\else
+	\endgroup
+	\end{flushleft}
+	\fi\fi
+}}
+
+\NewDocumentEnvironment{pf}{O{}}{%
+	\ifuse@fancythm
+    \par\hbox to\hsize{\xleaders\hbox to.8em{\hss-\hss}\hfill}
+	\begin{@pf}[#1]
+	\else
+	\begin{@pf}[#1]
+	\fi
+}
+{%
+	\ifuse@fancythm
+	\end{@pf}
+    \par\hbox to\hsize{\xleaders\hbox to.8em{\hss-\hss}\hfill}
+	\par
+	\else
+	\end{@pf}
+	\fi
+}
+
+\maketheorem{Definition}{coprimeDefinition}{\bfseries Definition\ \thecoprimeDefinition}
+\maketheorem{Theorem}{coprimeTheorem}{\bfseries Theorem\ \thecoprimeTheorem}
+\maketheorem{Proposition}{coprimeProposition}{\bfseries Proposition\ \thecoprimeProposition}
+\maketheorem{Corollary}{coprimeCorollary}{\bfseries Corollary\ \thecoprimeCorollary}
+\maketheorem{Lemma}{coprimeLemma}{\bfseries Lemma\ \thecoprimeLemma}
+
+\let\remark\@remark
+\let\endremark\end@remark
+\let\counterexample\@counter
+\let\endcounterexample\end@counter
+
+\NewDocumentEnvironment{definition}{o}{\begin{Definition}[#1]}{\end{Definition}}
+\NewDocumentEnvironment{theorem}{o}{\begin{Theorem}[#1]}{\end{Theorem}}
+\NewDocumentEnvironment{proposition}{o}{\begin{Proposition}[#1]}{\end{Proposition}}
+\NewDocumentEnvironment{corollary}{o}{\begin{Corollary}[#1]}{\end{Corollary}}
+\NewDocumentEnvironment{defin}{o}{\begin{Definition}[#1]}{\end{Definition}}
+\NewDocumentEnvironment{thm}{o}{\begin{Theorem}[#1]}{\end{Theorem}}
+\NewDocumentEnvironment{prop}{o}{\begin{Proposition}[#1]}{\end{Proposition}}
+\NewDocumentEnvironment{coro}{o}{\begin{Corollary}[#1]}{\end{Corollary}}
+\NewDocumentEnvironment{lemma}{o}{\begin{Lemma}[#1]}{\end{Lemma}}
+\NewDocumentEnvironment{proof}{o}{\begin{pf}[#1]}{\end{pf}}
+\ExplSyntaxOn

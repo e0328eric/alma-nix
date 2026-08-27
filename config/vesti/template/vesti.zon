@@ -1,0 +1,8 @@
+.{
+    .name = "template",
+    .version = "1.0.2",
+    .exports = .{
+        .{ .name = "before.lua", .location = "." },
+        .{ .name = "font.ves", .location = "." },
+    },
+}

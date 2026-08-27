@@ -1,0 +1,10 @@
+.{
+    .name = "coprime",
+    .version = "3.0.2",
+    .exports = .{
+        .{ .name = "coprime-math.sty" },
+        .{ .name = "coprime-reference.sty" },
+        .{ .name = "coprime.cls" },
+        .{ .name = "fancythm.sty" },
+    },
+}

@@ -1,0 +1,10 @@
+theme = Monokai Remastered
+
+# font-family        = DepartureMono Nerd Font Mono
+font-family        = D2CodingLigature Nerd Font Mono
+font-size          = 10
+background-opacity = 0.85
+cursor-style       = block
+confirm-close-surface = false
+# keybindings
+config-file = ./keybindings

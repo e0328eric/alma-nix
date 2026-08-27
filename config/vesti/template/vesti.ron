@@ -1,0 +1,8 @@
+VestiModule(
+    name: "template",
+    version: Some("1.0.2"),
+    exports: [
+        ( name: "before.lua", location: Some(".") ),
+        ( name: "font.ves", location: Some(".") ),
+    ],
+)

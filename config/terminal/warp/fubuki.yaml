@@ -1,0 +1,33 @@
+accent: '#2596be'
+background: '#0a0a08'
+details: darker
+foreground: '#f1ebeb'
+
+############################################################### SEE BELOW
+background_image:
+  # the path is relative to ~/.warp/themes/
+  # the full path to the picture is: ~/.warp/themes/warp.jpg
+  path: Shirakami_Fubuki2.png
+  # the opacity value is required and can range from 0-100
+  opacity: 35
+############################################################### SEE ABOVE
+
+terminal_colors:
+  bright:
+    black: '#76715e'
+    blue: '#66d9ee'
+    cyan: '#66efd5'
+    green: '#a7e22e'
+    magenta: '#ae82ff'
+    red: '#fa2772'
+    white: '#acada1'
+    yellow: '#d4c96e'
+  normal:
+    black: '#48483e'
+    blue: '#55bcce'
+    cyan: '#56b7a5'
+    green: '#8fc029'
+    magenta: '#9358fe'
+    red: '#dc2566'
+    white: '#acada1'
+    yellow: '#d4c96e'

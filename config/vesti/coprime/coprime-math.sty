@@ -1,0 +1,283 @@
+%%==============================================================================
+
+%% This package has a copywrite to Coprime --- Ver 2.00
+%% Email Address : almagest0328@gmail.com
+%
+%% coprime-math Package, First Release Date : 2019/09/28
+%
+%% Ver 1.00 : 19/09/28 --- To manage simply, this package was made
+%% Ver 1.01 : 19/11/06 --- Both XeTeX and LuaTeX can be used
+%% Ver 1.02 : 19/11/25 --- Fix \Matrix bug and change its definition
+%% Ver 1.03 : 20/01/02 --- Fix \proved command
+%% Ver 2.00 : 24/11/01 --- Add new symbols
+%% Ver 2.01 : 25/07/19 --- Add new font
+
+%%==============================================================================
+
+% LaTeX Format and Define a Package Name
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3, xparse, l3keys2e}
+\ProvidesExplPackage {coprime-math} {2025/07/19} {2.01} {Copywrite to Coprime}
+
+% Declare Options
+\keys_define:nn {coprime-math-options}
+{
+    nobreak .bool_set:N = \g_nobreak_math_bool,
+    stix .bool_set:N = \g_stix_math_bool,
+    erewhon .bool_set:N = \g_erewhon_math_bool,
+}
+\ProcessKeysOptions{coprime-math-options}
+
+% Raise Error when the tex engine is not either pdf, xe or lua
+\sys_if_engine_ptex:T
+{
+    \ClassError{coprime}{Use~'pdftex',~'xetex',~or~'luatex'~engine}{}
+}
+\sys_if_engine_uptex:T
+{
+    \ClassError{coprime}{Use~'pdftex',~'xetex',~or~'luatex'~engine}{}
+}
+
+%Import Basic math Packages
+\RequirePackage{amsmath, amssymb, amsthm, amsfonts}
+\RequirePackage{mathrsfs, euscript}
+\RequirePackage{mathtools}
+\RequirePackage{scalerel}
+\RequirePackage{fouridx}
+\RequirePackage{relsize}
+\RequirePackage{etoolbox}
+
+% Aligned math break
+\bool_if:NF \g_nobreak_math_bool
+{
+    \allowdisplaybreaks
+}
+
+% Math Commands
+% Use DeclareMathOperator simply
+\let\DMO\DeclareMathOperator
+
+% Use \largecomp to display the original complement
+\let\largecomp\complement
+
+%% Math Settings
+% Math Symbol
+\sys_if_engine_pdftex:TF
+{
+    \bool_if:NTF \g_stix_math_bool
+    {%
+	\RequirePackage[upint]{stix2}
+	\let\oldemptyset\emptyset
+	\let\emptyset\varnothing
+	\renewenvironment{cases}{\left\{\begin{matrix}}{\end{matrix}\right.}
+    }
+    {%
+	\DMO*{\bigcupdot}
+	{%
+	    \ooalign{\hfil$\displaystyle\bigcup$\hfil\cr%
+	    \hfil\raise-.4ex\hbox{\larger[3]$\cdot$}\raise-1.17ex\hbox{}\hfil\cr}
+	}
+	\newcommand{\cupdot}{\ooalign{\hfil$\cup$\hfil\cr\hfil$\cdot$\hfil\cr}}
+	\DMO{\nullint}{\scalerel*[0.1pt]{\phantom{|}}{\int}}
+	\newcommand{\upint}{\overline{\int}\hskip-1.5pt\nullint}
+	\newcommand{\lowint}{\underline{\int}\hskip-1.5pt\nullint}
+	\let\oldemptyset\emptyset
+	\let\emptyset\varnothing
+    }
+}
+{
+    \bool_if:NTF \g_stix_math_bool
+    {
+	\RequirePackage{fontspec}
+	\RequirePackage[math-style=TeX]{unicode-math}
+    \setmainfont{STIX~Two~Text}[Path]
+    \setmathfonth{STIX~Two~Math}[Path,StylisticSet=8]
+	\renewenvironment{cases}{\left\{\begin{matrix}}{\end{matrix}\right.}
+    }
+    {
+    \bool_if:NTF \g_erewhon_math_bool
+    {
+	\RequirePackage{fontspec}
+	\RequirePackage{unicode-math}
+    \setmainfont{erewhon}[Path]                             % rm
+    \setsansfont{Calibri}[Path,Scale=MatchLowercase]        % sf
+    \setmonofont{Courier~New}[Path,Scale=MatchLowercase]    % tt
+    \setmathfont{Erewhon~Math}[Path]
+	\renewenvironment{cases}{\left\{\begin{matrix}}{\end{matrix}\right.}
+    }
+    {
+	\DMO*{\bigcupdot}
+	{%
+	    \ooalign{\hfil$\displaystyle\bigcup$\hfil\cr%
+	    \hfil\raise-.4ex\hbox{\larger[3]$\cdot$}\raise-1.17ex\hbox{}\hfil\cr}
+	}
+	\newcommand{\cupdot}{\ooalign{\hfil$\cup$\hfil\cr\hfil$\cdot$\hfil\cr}}
+	\DMO{\nullint}{\scalerel*[0.1pt]{\phantom{|}}{\int}}
+	\newcommand{\upint}{\overline{\int}\hskip-1.5pt\nullint}
+	\newcommand{\lowint}{\underline{\int}\hskip-1.5pt\nullint}
+	\RequirePackage{mathrsfs, euscript}
+	\let\oldemptyset\emptyset
+	\let\emptyset\varnothing
+    }
+    }
+}
+
+\newcommand{\cl}[1]{\overline{#1}}
+
+\let\oldcomplement\complement
+\renewcommand{\complement}[1]{{#1}^{\mathsf{c}}}
+\newcommand{\comp}[1]{{#1}^{\mathsf{c}}}
+\newcommand{\contradiction}{\ifmmode(\downzigzagarrow)\else$(\downzigzagarrow)$\fi}
+
+% Math Font Commands
+\def\rm#1{\ifmmode\mathrm{#1}\else\textrm{#1}\fi}
+\def\sf#1{\ifmmode\mathsf{#1}\else\textsf{#1}\fi}
+\def\tt#1{\ifmmode\mathtt{#1}\else\texttt{#1}\fi}
+\def\bf#1{\ifmmode\mathbf{#1}\else\textbf{#1}\fi}
+\def\md#1{\ifmmode\mathmd{#1}\else\textmd{#1}\fi}
+\def\lf#1{\ifmmode\mathlf{#1}\else\textlf{#1}\fi}
+\def\it#1{\ifmmode\mathit{#1}\else\textit{#1}\fi}
+\def\up#1{\ifmmode\mathup{#1}\else\textup{#1}\fi}
+\def\sl#1{\ifmmode\mathsl{#1}\else\textsl{#1}\fi}
+\def\sc#1{\ifmmode\mathsc{#1}\else\textsc{#1}\fi}
+
+\def\es#1{\EuScript{#1}}
+\def\scr#1{\mathscr{#1}}
+\def\cal#1{\mathcal{#1}}
+\def\frak#1{\mathfrak{#1}}
+\def\bbb#1{\mathbb{#1}}
+
+\def\limsup{\mathop{\overline{\lim}}}
+\def\liminf{\mathop{\vcenter{\hbox{$\underline{\lim}$}}}}
+\let\lims=\limsup
+\let\limi=\liminf
+
+% NOTE: stolen from
+% https://tex.stackexchange.com/questions/759/average-integral-symbol#760
+\bool_if:NF \g_stix_math_bool
+{
+    \def\Xint#1{\mathchoice
+    {\XXint\displaystyle\textstyle{#1}}%
+    {\XXint\textstyle\scriptstyle{#1}}%
+    {\XXint\scriptstyle\scriptscriptstyle{#1}}%
+    {\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+    \!\int}
+    \def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$ }
+    \vcenter{\hbox{$#2#3$ }}\kern-.49\wd0}}
+    \def\intbar{\Xint-}
+    \def\intBar{\Xint=}
+}
+
+% Define Simple Font Load
+\def\do#1{%
+    \@namedef{#1b}{{\ensuremath{\bbb{#1}}}}
+    \@namedef{#1c}{{\ensuremath{\mathcal{#1}}}}
+    \@namedef{#1s}{{\ensuremath{\mathscr{#1}}}}
+    \@namedef{#1e}{{\ensuremath{\EuScript{#1}}}}
+    \@namedef{#1f}{{\ensuremath{\mathfrak{#1}}}}
+}
+\docsvlist{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+
+% Define the set of the number system
+\let\N\Nb \let\Z\Zb \let\Q\Qb \let\R\Rb \let\@C\Cb
+
+\def\lcm{\mathop{\mathrm{lcm}}\nolimits}
+\def\supp{\mathop{\mathrm{supp}}\nolimits}
+\def\Re{\mathop{\mathrm{Re}}\nolimits}
+\def\Im{\mathop{\mathrm{Im}}\nolimits}
+
+% Define the \Matrix command
+\tl_new:N \l_change_cs_tl
+\tl_new:N \l_type_matrix_tl
+
+\NewDocumentCommand{\Matrix}{soom}{%
+    \tl_set:Nn \l_change_cs_tl {#4}
+    \tl_replace_all:Nnn \l_change_cs_tl {,} {&}
+	\tl_replace_all:Nnn \l_change_cs_tl {;} {\\}
+    \IfNoValueTF{#3}
+    {%
+	\IfNoValueTF{#2}
+	{\tl_set:Nn \l_type_matrix_tl {p}}
+	{%
+	    \tl_if_in:nnTF {#2} {n}
+	    {%
+		\tl_set:Nn \l_type_matrix_tl {}
+	    }
+	    {%
+		\tl_set:Nn \l_type_matrix_tl {#2}
+	    }
+	}
+	\IfBooleanTF{#1}
+	{%
+	    \tl_put_right:Nn \l_type_matrix_tl {smallmatrix*}
+	    \begin{\tl_use:N \l_type_matrix_tl}[c]
+		\tl_use:N \l_change_cs_tl
+	    \end{\tl_use:N \l_type_matrix_tl}
+	}
+	{%
+	    \tl_put_right:Nn \l_type_matrix_tl {matrix}
+	    \begin{\tl_use:N \l_type_matrix_tl}
+		\tl_use:N \l_change_cs_tl
+	    \end{\tl_use:N \l_type_matrix_tl}
+	}
+    }
+    {%
+	\tl_if_empty:nTF {#2}
+	{%
+	    \def\LeftDelimeter{(}
+	}
+	{%
+	    \def\LeftDelimeter{#2}
+	}
+	\tl_if_empty:nTF {#3}
+	{%
+	    \def\RightDelimeter{)}
+	}
+	{%
+	    \IfNoValueTF{#3}
+	    {%
+		\def\RightDelimeter{)}
+	    }
+	    {%
+		\def\RightDelimeter{#3}
+	    }
+	}
+	\IfBooleanTF{#1}
+	{%
+	    \left\LeftDelimeter\begin{smallmatrix*}[c]
+		\tl_use:N \l_change_cs_tl
+	    \end{smallmatrix*}\right\RightDelimeter
+	}
+	{%
+	    \left\LeftDelimeter\begin{matrix}
+		\tl_use:N \l_change_cs_tl
+	    \end{matrix}\right\RightDelimeter
+	}
+    }
+}
+
+% Other useful commands
+\NewDocumentCommand{\idx}{mm}{\idx@Assist{#1,#2}}
+\NewDocumentCommand{\idx@Assist}{>{\SplitArgument{4}{,}}m}{%
+    \idx@@Assist #1
+}
+\NewDocumentCommand{\idx@@Assist}{mmmmm}{%
+    \fourIdx{#1}{#3}{#2}{#4}{#5}
+}
+\NewDocumentCommand{\converge}{O{}}{%
+    \IfNoValueTF{#1}
+    {\mbox{}\overset{}{\rightarrow}}
+    {\mbox{}\overset{\raisebox{-1.7pt}{\scriptsize${#1}$}}{\rightarrow}}
+}
+\def\uniform{\rightrightarrows}
+\def\defeq{\coloneqq}
+\let\normaleq\trianglelefteq
+\let\normal\vartriangleleft
+\sys_if_engine_luatex:TF
+{
+    \relax
+}
+{
+    \let\oldC\C
+    \let\C\@C
+}

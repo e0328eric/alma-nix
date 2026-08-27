@@ -1,0 +1,13 @@
+{
+    "theme": {
+        "bg"     : "#312c2b",
+        "fg"     : "#e4d8c8",
+        "red"    : "#f86882",
+        "orange" : "#f08d71",
+        "yellow" : "#fdb760",
+        "green"  : "#a6cd77",
+        "blue"   : "#6db6c3",
+        "purple" : "#c79bf0",
+        "grey"   : "#8a857f"
+    }
+}

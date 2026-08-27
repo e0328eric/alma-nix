@@ -1,0 +1,219 @@
+[bar]
+density = "compact"
+floating = false
+position = "left"
+showCapsule = false
+
+    [bar.widgets]
+    background_opacity = 0.84999999999999998
+    center = [ "workspaces" ]
+    end = [ "tray", "clipboard", "volume", "brightness", "battery", "session", "date", "clock" ]
+    margin_edge = 0
+    margin_ends = 0
+    position = "left"
+    radius = 0
+    start = [ "launcher", "media", "notifications", "network", "bluetooth", "temp" ]
+
+        [[bar.widgets.left]]
+        id = "ControlCenter"
+        useDistroLogo = true
+
+        [[bar.widgets.left]]
+        id = "Network"
+
+        [[bar.widgets.left]]
+        id = "Bluetooth"
+
+        [[bar.widgets.left]]
+        compactMode = false
+        diskPath = "/"
+        iconColor = "primary"
+        id = "SystemMonitor"
+        showCpuFreq = false
+        showCpuTemp = true
+        showCpuUsage = true
+        showDiskAvailable = false
+        showDiskUsage = true
+        showDiskUsageAsPercent = false
+        showGpuTemp = false
+        showLoadAverage = false
+        showMemoryAsPercent = false
+        showMemoryUsage = true
+        showNetworkStats = false
+        showSwapUsage = false
+        textColor = "none"
+        useMonospaceFont = true
+        usePadding = false
+
+        [[bar.widgets.right]]
+        id = "Tray"
+
+        [[bar.widgets.right]]
+        id = "Volume"
+
+        [[bar.widgets.right]]
+        alwaysShowPercentage = true
+        id = "Battery"
+        warningThreshold = 30
+
+        [[bar.widgets.right]]
+        formatHorizontal = "HH:mm"
+        formatVertical = "HH mm"
+        id = "Clock"
+        useMonospacedFont = true
+        usePrimaryColor = true
+
+[colorSchemes]
+predefinedScheme = "Monochrome"
+
+[desktop_widgets]
+schema_version = 2
+widget_order = []
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget]
+
+[dock]
+auto_hide = true
+icon_size = 16
+position = "bottom"
+
+[general]
+avatarImage = "/home/drfoobar/.face"
+radiusRatio = 0.20000000000000001
+
+[location]
+monthBeforeDay = true
+name = "Seoul, South Korea"
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [
+    "lockscreen-login-box@DP-4",
+    "lockscreen-login-box@DP-3",
+    "lockscreen-login-box@HDMI-A-3",
+    "lockscreen-login-box@eDP-1"
+]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-3"]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 800.0
+    cy = 877.0
+    output = "DP-3"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-3".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_login_button = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@DP-4"]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 800.0
+    cy = 877.0
+    output = "DP-4"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@DP-4".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_login_button = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-3"]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 799.0
+    cy = 876.0
+    output = "HDMI-A-3"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@HDMI-A-3".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_login_button = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@eDP-1"]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 800.0
+    cy = 877.0
+    output = "eDP-1"
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@eDP-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        input_opacity = 1.0
+        input_radius = 6.0
+        show_login_button = true
+
+[shell.screenshot]
+confirm_region = true
+
+[theme]
+builtin = "Ayu"
+mode = "dark"
+source = "wallpaper"
+
+[wallpaper]
+directory = "/home/almagest/.config/alma-wallpapers"
+enabled = true
+
+    [wallpaper.default]
+    path = "/home/almagest/.config/alma-wallpapers/Anby_Demara.png"
+
+    [wallpaper.last]
+    path = "/home/almagest/.config/alma-wallpapers/phrolova.png"
+
+    [wallpaper.monitors.DP-3]
+    path = "/home/almagest/.config/alma-wallpapers/lilpa_night.png"
+
+    [wallpaper.monitors.DP-4]
+    path = "/home/almagest/.config/alma-wallpapers/phrolova.png"
+
+    [wallpaper.monitors.eDP-1]
+    path = "/home/almagest/.config/alma-wallpapers/Cerydra.png"
+
+[widget.clock]
+format = "{:%H:%M:%S}"
+
+[widget.cpu]
+stat = "gpu_usage"
+
+[widget.network]
+show_label = false
+
+[widget.temp]
+scale = 0.65000000000000002
+show_label = false
+stat = "ram_used"
+
+[widget.tray]
+capsule = true
+drawer = true

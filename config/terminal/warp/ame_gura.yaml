@@ -1,0 +1,33 @@
+accent: '#2596be'
+background: '#2d2d2d'
+details: darker
+foreground: '#d3d0c8'
+
+############################################################### SEE BELOW
+background_image:
+  # the path is relative to ~/.warp/themes/
+  # the full path to the picture is: ~/.warp/themes/warp.jpg
+  path: ame_gura.png
+  # the opacity value is required and can range from 0-100
+  opacity: 35
+############################################################### SEE ABOVE
+
+terminal_colors:
+  bright:
+    black: '#747369'
+    blue: '#6699cc'
+    cyan: '#66cccc'
+    green: '#99cc99'
+    magenta: '#cc99cc'
+    red: '#f2777a'
+    white: '#f2f0ec'
+    yellow: '#ffcc66'
+  normal:
+    black: '#2d2d2d'
+    blue: '#6699cc'
+    cyan: '#66cccc'
+    green: '#99cc99'
+    magenta: '#cc99cc'
+    red: '#f2777a'
+    white: '#d3d0c8'
+    yellow: '#ffcc66'

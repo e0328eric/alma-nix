@@ -1,0 +1,71 @@
+%%==============================================================================
+
+%% This package has a copywrite to Coprime --- Ver 1.00
+%% Email Address : almagest0328@gmail.com
+%
+%% coprime-reference Package, First Release Date : 2019/09/28
+%
+%% Ver 1.00 : 19/09/28 --- To manage simply, this package was made
+
+%%==============================================================================
+
+% LaTeX Format and Define a Package Name
+\NeedsTeXFormat{LaTeX2e}
+\RequirePackage{expl3, xparse, l3keys2e}
+\ProvidesExplPackage {coprime-reference} {2019/09/28} {1.00} {Copywrite to Coprime}
+
+% Reference Environment
+\newwrite\tf@bib
+\newsavebox\box@bib
+\newcommand\bib[1]{\protected@write\@auxout{}{\string\@writefile{bib}{#1}}}
+\NewDocumentEnvironment{reference}{O{plain}}{%
+    \openout\tf@bib=\jobname.bib
+    \let\NDC\NewDocumentCommand
+    \NDC{\article}{mmmmO{}}{%
+	\bib{@Article{##1,title={##2},author={##3},year={##4},##5}}
+    }
+    \NDC{\book}{smmmmmO{}}{%
+	\IfBooleanTF{##1}
+	{\bib{@Book{##2,title={##3},editor={##4},year={##5},publisher={##6},##7}}}
+	{\bib{@Book{##2,title={##3},author={##4},year={##5},publisher={##6},##7}}}
+    }
+    \NDC{\booklet}{mmO{}}{%
+	\bib{@Booklet{##1,title={##2},##3}}
+    }
+    \NDC{\inbook}{smmmmmmO{}}{%
+	\IfBooleanTF{##1}
+	{\bib{@Inbook{##2,title={##3},editor={##4},year={##5},chapter={##6},publisher={##7},##8}}}
+	{\bib{@Inbook{##2,title={##3},author={##4},year={##5},chapter={##6},publisher={##7},##8}}}
+    }
+    \NDC{\incollection}{mmmmmmO{}}{%
+	\bib{@Incollection{##1,title={##2},author={##3},booktitle={##4},year={##5},publisher={##6},##7}}
+    }
+    \NDC{\conference}{mmmmmO{}}{%
+	\bib{@Conference{##1,title={##2},author={##3},booktitle={##4},year={##5},##6}}
+    }
+    \NDC{\manual}{mmO{}}{%
+	\bib{@Manual{##1,title={##2},##3}}
+    }
+    \NDC{\master}{mmmmmO{}}{%
+	\bib{@Mastersthesis{##1,title={##2},author={##3},year={##4},school={##5},##6}}
+    }
+    \NDC{\phd}{mmmmmO{}}{%
+	\bib{@PhDthesis{##1,title={##2},author={##3},year={##4},school={##5},##6}}
+    }
+    \NDC{\misc}{mmmO{}}{%
+	\bib{@Misc{##1,title={##2},author={##3},##4}}
+    }
+    \NDC{\proceedings}{mmmO{}}{%
+	\bib{@Proceedings{##1,title={##2},year={##3},##4}}
+    }
+    \NDC{\report}{mmmmmO{}}{%
+	\bib{@Techreport{##1,title={##2},author={##3},year={##4},institution={##5},##6}}
+    }
+    \NDC{\unpublished}{mmmmO{}}{%
+	\bib{@Unpublished{##1,title={##2},author={##3},note={##4},##5}}
+    }
+}
+{%
+    \bibliographystyle{#1}
+    \bibliography{\jobname}
+}
