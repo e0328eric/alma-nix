@@ -37,13 +37,17 @@ bind({ "down" },  hl.dsp.focus({ direction = "down" }))
 
 bind({ SHIFT, "left" },  hl.dsp.window.swap({ direction = "left" }))
 bind({ SHIFT, "right" }, hl.dsp.window.swap({ direction = "right" }))
-bind({ SHIFT, "up" },    hl.dsp.window.swap({ direction = "up" }))
-bind({ SHIFT, "down" },  hl.dsp.window.swap({ direction = "down" }))
+-- bind({ SHIFT, "up" },    hl.dsp.window.swap({ direction = "up" }))
+-- bind({ SHIFT, "down" },  hl.dsp.window.swap({ direction = "down" }))
 
-bind({ ALT, SHIFT, "left" },  hl.dsp.window.resize({ x = -10, y = 0 }))
-bind({ ALT, SHIFT, "right" }, hl.dsp.window.resize({ x = 10,  y = 0 }))
-bind({ ALT, SHIFT, "up" },    hl.dsp.window.resize({ x = 0,   y = -10 }))
-bind({ ALT, SHIFT, "down" },  hl.dsp.window.resize({ x = 0,   y = 10 }))
+-- NOTE: This configuration only works on scrolling layout
+bind({ SHIFT, "up" },   hl.dsp.layout("colresize +conf"))
+bind({ SHIFT, "down" }, hl.dsp.layout("colresize -conf"))
+
+-- bind({ ALT, SHIFT, "left" },  hl.dsp.window.resize({ x = -10, y = 0 }))
+-- bind({ ALT, SHIFT, "right" }, hl.dsp.window.resize({ x = 10,  y = 0 }))
+-- bind({ ALT, SHIFT, "up" },    hl.dsp.window.resize({ x = 0,   y = -10 }))
+-- bind({ ALT, SHIFT, "down" },  hl.dsp.window.resize({ x = 0,   y = 10 }))
 
 for i = 1, 10 do
     local key = i % 10 -- 10 maps to key 0
