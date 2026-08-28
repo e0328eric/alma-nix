@@ -209,3 +209,17 @@ hl.window_rule({
     move  = "20 monitor_h-120",
     float = true,
 })
+
+hl.curve(
+    "my_bezier",
+    {
+        type = "bezier",
+        points = { { 0.05, 0.9 }, { 0.1, 1.05 } },
+    }
+)
+
+hl.animation({ leaf = "windows",    enabled = true, speed = 7, bezier = "my_bezier" })
+hl.animation({ leaf = "windowsIn",  enabled = true, speed = 7, bezier = "my_bezier", style = "slide" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 7, bezier = "my_bezier", style = "slide" })
+hl.animation({ leaf = "fade",       enabled = true, speed = 7, spring = "default" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "my_bezier", style = "slide" })
