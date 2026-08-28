@@ -30,24 +30,25 @@ bind({ SHIFT, "F" }, hl.dsp.window.fullscreen())
 bind({ "P" },        hl.dsp.window.pin())
 
 -- Move focus with mainMod + arrow keys
-bind({ "left" },  hl.dsp.focus({ direction = "left" }))
-bind({ "right" }, hl.dsp.focus({ direction = "right" }))
-bind({ "up" },    hl.dsp.focus({ direction = "up" }))
-bind({ "down" },  hl.dsp.focus({ direction = "down" }))
+bind({ "left" },        hl.dsp.focus({ direction = "left" }))
+bind({ "right" },       hl.dsp.focus({ direction = "right" }))
+bind({ "up" },          hl.dsp.focus({ direction = "up" }))
+bind({ "down" },        hl.dsp.focus({ direction = "down" }))
+
+bind({ CTRL, "left" },     hl.dsp.window.move({ direction = "left" }))
+bind({ CTRL, "right" },    hl.dsp.window.move({ direction = "right" }))
+bind({ CTRL, "up" },       hl.dsp.window.move({ direction = "up" }))
+bind({ CTRL, "down" },     hl.dsp.window.move({ direction = "down" }))
 
 bind({ SHIFT, "left" },  hl.dsp.window.swap({ direction = "left" }))
 bind({ SHIFT, "right" }, hl.dsp.window.swap({ direction = "right" }))
--- bind({ SHIFT, "up" },    hl.dsp.window.swap({ direction = "up" }))
--- bind({ SHIFT, "down" },  hl.dsp.window.swap({ direction = "down" }))
+bind({ SHIFT, "up" },    hl.dsp.window.swap({ direction = "up" }))
+bind({ SHIFT, "down" },  hl.dsp.window.swap({ direction = "down" }))
 
--- NOTE: This configuration only works on scrolling layout
-bind({ SHIFT, "up" },   hl.dsp.layout("colresize +conf"))
-bind({ SHIFT, "down" }, hl.dsp.layout("colresize -conf"))
-
--- bind({ ALT, SHIFT, "left" },  hl.dsp.window.resize({ x = -10, y = 0 }))
--- bind({ ALT, SHIFT, "right" }, hl.dsp.window.resize({ x = 10,  y = 0 }))
--- bind({ ALT, SHIFT, "up" },    hl.dsp.window.resize({ x = 0,   y = -10 }))
--- bind({ ALT, SHIFT, "down" },  hl.dsp.window.resize({ x = 0,   y = 10 }))
+bind({ "tab" },              hl.dsp.layout("swapcol l"))
+bind({ SHIFT, "tab" },       hl.dsp.layout("swapcol r"))
+bind({ CTRL, "tab" },        hl.dsp.layout("colresize +conf"))
+bind({ CTRL, SHIFT, "tab" }, hl.dsp.layout("colresize -conf"))
 
 for i = 1, 10 do
     local key = i % 10 -- 10 maps to key 0
@@ -70,12 +71,12 @@ bind({ "mouse:272" },        hl.dsp.window.drag(),   { mouse = true })
 bind({ SHIFT, "mouse:272" }, hl.dsp.window.resize(), { mouse = true })
 
 -- Laptop multimedia keys for volume and LCD brightness
-hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
-hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
+hl.bind("XF86AudioRaiseVolume", hl.dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 3%+"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", hl.dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 3%-"),      { locked = true, repeating = true })
 hl.bind("XF86AudioMute",        hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true, repeating = true })
 hl.bind("XF86AudioMicMute",     hl.dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"),   { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%+"),                  { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 5%-"),                  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",  hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 3%+"),                  { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessDown",hl.dsp.exec_cmd("brightnessctl -e4 -n2 set 3%-"),                  { locked = true, repeating = true })
 
 -- Requires playerctl
 hl.bind("XF86AudioNext",  hl.dsp.exec_cmd("playerctl next"),       { locked = true })
