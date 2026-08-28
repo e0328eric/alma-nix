@@ -188,6 +188,18 @@ hl.device({
     sensitivity = -0.5,
 })
 
+------------------
+---- XWayland ----
+------------------
+-- change monitor to high resolution, the last argument is the scale factor
+hl.monitor({ output = "", mode = "highres", position = "auto", scale = "2" })
+
+-- unscale XWayland
+hl.config({
+  xwayland = {
+    force_zero_scaling = true
+  }
+})
 --------------------------------
 ---- WINDOWS AND WORKSPACES ----
 --------------------------------
