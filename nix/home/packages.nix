@@ -62,7 +62,6 @@ in
     zathura
     zathuraPkgs.zathura_djvu
     zathuraPkgs.zathura_pdf_mupdf
-    zed
     zenity
     zip
     (pkgs.writeShellScriptBin "ns" (builtins.readFile "${pkgs.nix-search-tv.src}/nixpkgs.sh"))

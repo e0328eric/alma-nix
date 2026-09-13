@@ -84,7 +84,8 @@ function nixnix
 end
 
 function nixupdate
-    sudo nixos-rebuild switch --upgrade --flake ~/.nixos#almanixos
+    cp $HOME/.nixos/flake.lock $HOME/.nixos/flake.lock.old
+    sudo nix flake update nixpkgs
 end
 
 function flakeupdate

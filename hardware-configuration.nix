@@ -14,29 +14,30 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/f2041846-2d85-4422-bd0b-efdce1a64585";
+    { device = "/dev/disk/by-uuid/5f1cef9c-2446-4e25-a165-8cfb5bdefdb1";
       fsType = "btrfs";
     };
 
-  fileSystems."/game" =
-    { device = "/dev/disk/by-uuid/bb5f4f2c-18cb-4957-978a-2b318cc4fdf0";
-      fsType = "ext4";
+  fileSystems."/home" =
+    { device = "/dev/disk/by-uuid/89238a71-a38f-4116-aa0c-195c2b6a821e";
+      fsType = "btrfs";
+      options = [ "subvol=@home" ];
     };
 
-  fileSystems."/home/almagest/.local/share/Steam" =
-    { device = "/game/Steam";
-      fsType = "none";
-      options = [ "bind" ];
+  fileSystems."/game" =
+    { device = "/dev/disk/by-uuid/89238a71-a38f-4116-aa0c-195c2b6a821e";
+      fsType = "btrfs";
+      options = [ "subvol=@game" ];
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/421A-DF4E";
+    { device = "/dev/disk/by-uuid/E482-7BDE";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
 
   swapDevices =
-    [ { device = "/dev/disk/by-uuid/dd58f937-c2f6-4e91-967b-1e6ecbb09d39"; }
+    [ { device = "/dev/disk/by-uuid/5bb195ab-3320-433f-a384-2287a4f53079"; }
     ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
