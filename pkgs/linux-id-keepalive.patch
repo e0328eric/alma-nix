@@ -1,0 +1,340 @@
+Subject: [PATCH] Send HID keepalives while waiting for fingerprint verification
+
+Chromium times out idle HID transactions while fprintd waits up to 30 seconds.
+Send UPNEEDED every 100ms during verification and PROCESSING before TPM work.
+Keep denial and timeout handling intact, and serialize HID response packets.
+
+--- a/main.go
++++ b/main.go
+@@ -51,6 +51,32 @@
+ type tokenResponder interface {
+ 	WriteResponse(ctx context.Context, evt fidohid.AuthEvent, data []byte, status uint16) error
+ 	WriteCtap2Response(ctx context.Context, evt fidohid.AuthEvent, status byte, data []byte) error
++	WriteKeepalive(ctx context.Context, evt fidohid.AuthEvent, status byte) error
++}
++
++// Chromium times out an idle HID transaction before a fingerprint scan's
++// deadline. CTAPHID_KEEPALIVE (UPNEEDED) tells it to keep waiting for the user.
++func waitForVerification(ctx context.Context, token tokenResponder, evt fidohid.AuthEvent, results <-chan VerifyResult) (VerifyResult, error) {
++	ticker := time.NewTicker(100 * time.Millisecond)
++	defer ticker.Stop()
++	for {
++		if err := token.WriteKeepalive(ctx, evt, 2); err != nil {
++			return VerifyResult{}, err
++		}
++		select {
++		case result := <-results:
++			if result.OK {
++				// The remaining TPM work is processing, not a new touch request.
++				if err := token.WriteKeepalive(ctx, evt, 1); err != nil {
++					return VerifyResult{}, err
++				}
++			}
++			return result, nil
++		case <-ctx.Done():
++			return VerifyResult{}, ctx.Err()
++		case <-ticker.C:
++		}
++	}
+ }
+ 
+ func main() {
+@@ -611,17 +637,21 @@
+ 	}
+ 	childCtx, cancel := context.WithTimeout(ctx, 35*time.Second)
+ 	defer cancel()
+-	select {
+-	case result := <-resultCh:
+-		if !result.OK {
+-			if result.Error != nil {
+-				log.Printf("MakeCredential verifier result err: %s", result.Error)
+-			}
+-			token.WriteCtap2Response(ctx, evt, statusForFailure(result), nil)
+-			return
+-		}
+-	case <-childCtx.Done():
+-		token.WriteCtap2Response(ctx, evt, ctap2.StatusUserActionTimeout, nil)
++	result, err := waitForVerification(childCtx, token, evt, resultCh)
++	if err != nil {
++		status := ctap2.StatusOperationDenied
++		if errors.Is(err, context.DeadlineExceeded) {
++			status = ctap2.StatusUserActionTimeout
++		}
++		log.Printf("MakeCredential waiting for verification: %s", err)
++		token.WriteCtap2Response(ctx, evt, status, nil)
++		return
++	}
++	if !result.OK {
++		if result.Error != nil {
++			log.Printf("MakeCredential verifier result err: %s", result.Error)
++		}
++		token.WriteCtap2Response(ctx, evt, statusForFailure(result), nil)
+ 		return
+ 	}
+ 
+@@ -781,17 +811,21 @@
+ 	}
+ 	childCtx, cancel := context.WithTimeout(ctx, 35*time.Second)
+ 	defer cancel()
+-	select {
+-	case result := <-resultCh:
+-		if !result.OK {
+-			if result.Error != nil {
+-				log.Printf("GetAssertion verifier result err: %s", result.Error)
+-			}
+-			token.WriteCtap2Response(ctx, evt, statusForFailure(result), nil)
+-			return
+-		}
+-	case <-childCtx.Done():
+-		token.WriteCtap2Response(ctx, evt, ctap2.StatusUserActionTimeout, nil)
++	result, err := waitForVerification(childCtx, token, evt, resultCh)
++	if err != nil {
++		status := ctap2.StatusOperationDenied
++		if errors.Is(err, context.DeadlineExceeded) {
++			status = ctap2.StatusUserActionTimeout
++		}
++		log.Printf("GetAssertion waiting for verification: %s", err)
++		token.WriteCtap2Response(ctx, evt, status, nil)
++		return
++	}
++	if !result.OK {
++		if result.Error != nil {
++			log.Printf("GetAssertion verifier result err: %s", result.Error)
++		}
++		token.WriteCtap2Response(ctx, evt, statusForFailure(result), nil)
+ 		return
+ 	}
+ 
+@@ -843,5 +877,3 @@
+ 	log.Printf("GetAssertion ok: rp=%s", req.RPID)
+ 	token.WriteCtap2Response(ctx, evt, ctap2.StatusOK, encoded)
+ }
+-
+-
+--- a/main_test.go
++++ b/main_test.go
+@@ -55,6 +55,10 @@
+ 	return nil
+ }
+ 
++func (f *fakeResponder) WriteKeepalive(_ context.Context, _ fidohid.AuthEvent, _ byte) error {
++	return nil
++}
++
+ func (f *fakeResponder) lastCtap2() ctap2Write {
+ 	if len(f.ctap2) == 0 {
+ 		return ctap2Write{}
+@@ -108,9 +112,9 @@
+ // constructs an ecdsa.PrivateKey without setting X/Y on the public key — newer
+ // Go (>=1.20) rejects that during ecdsa.SignASN1.
+ type fakeSigner struct {
+-	mu       sync.Mutex
+-	keys     map[string]*ecdsa.PrivateKey // credID-as-string → key
+-	counter  uint32
++	mu      sync.Mutex
++	keys    map[string]*ecdsa.PrivateKey // credID-as-string → key
++	counter uint32
+ }
+ 
+ func newFakeSigner() *fakeSigner {
+@@ -1491,11 +1495,12 @@
+ 
+ // COSE EC2 public key shape: the inner crypto key inside MakeCredential's
+ // authenticatorData must be a valid P-256 ES256 key. Field tags:
+-//   1  (kty)  = 2  (EC2)
+-//   3  (alg)  = -7 (ES256)
+-//   -1 (crv)  = 1  (P-256)
+-//   -2 (x)    = 32 bytes
+-//   -3 (y)    = 32 bytes
++//
++//	1  (kty)  = 2  (EC2)
++//	3  (alg)  = -7 (ES256)
++//	-1 (crv)  = 1  (P-256)
++//	-2 (x)    = 32 bytes
++//	-3 (y)    = 32 bytes
+ func TestMakeCredential_COSEKeyShape(t *testing.T) {
+ 	verifier := &fakeVerifier{performsUV: true, nextResult: VerifyResult{OK: true}}
+ 	s := newTestServer(t, verifier, &fakePinentry{})
+--- /dev/null
++++ b/keepalive_test.go
+@@ -0,0 +1,78 @@
++package main
++
++import (
++	"context"
++	"errors"
++	"testing"
++	"time"
++
++	"github.com/matejsmycka/linux-id/fidohid"
++)
++
++type keepaliveResponder struct {
++	fakeResponder
++	statuses    []byte
++	onKeepalive func(byte) error
++}
++
++func (f *keepaliveResponder) WriteKeepalive(_ context.Context, _ fidohid.AuthEvent, status byte) error {
++	f.statuses = append(f.statuses, status)
++	if f.onKeepalive != nil {
++		return f.onKeepalive(status)
++	}
++	return nil
++}
++
++func TestKeepaliveWhileWaitingForFingerprint(t *testing.T) {
++	for _, ok := range []bool{true, false} {
++		t.Run(map[bool]string{true: "match", false: "no match"}[ok], func(t *testing.T) {
++			results := make(chan VerifyResult, 1)
++			response := &keepaliveResponder{}
++			response.onKeepalive = func(status byte) error {
++				// Deliver the scan only after multiple progress packets. This
++				// models a person who needs time to reach the fingerprint reader.
++				if len(response.statuses) == 3 {
++					results <- VerifyResult{OK: ok, Reason: ReasonNoMatch}
++				}
++				return nil
++			}
++			ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
++			defer cancel()
++			result, err := waitForVerification(ctx, response, fidohid.AuthEvent{}, results)
++			if err != nil || result.OK != ok || result.Reason != ReasonNoMatch {
++				t.Fatalf("scan result changed: %+v, %v", result, err)
++			}
++			for _, status := range response.statuses[:3] {
++				if status != 2 {
++					t.Fatalf("expected UPNEEDED while waiting, got %d", status)
++				}
++			}
++			if ok && (len(response.statuses) != 4 || response.statuses[3] != 1) {
++				t.Fatalf("expected PROCESSING after successful scan: %v", response.statuses)
++			}
++			if !ok && len(response.statuses) != 3 {
++				t.Fatalf("failed scan must not continue processing: %v", response.statuses)
++			}
++		})
++	}
++}
++
++func TestKeepaliveDoesNotAuthenticateOnTimeout(t *testing.T) {
++	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Millisecond)
++	defer cancel()
++	result, err := waitForVerification(ctx, &keepaliveResponder{}, fidohid.AuthEvent{}, make(chan VerifyResult))
++	if result.OK || !errors.Is(err, context.DeadlineExceeded) {
++		t.Fatalf("expected timeout without authentication, got %+v, %v", result, err)
++	}
++}
++
++func TestKeepaliveWriteFailureDeniesAuthentication(t *testing.T) {
++	disconnected := errors.New("HID device disconnected")
++	response := &keepaliveResponder{onKeepalive: func(byte) error { return disconnected }}
++	results := make(chan VerifyResult, 1)
++	results <- VerifyResult{OK: true}
++	result, err := waitForVerification(context.Background(), response, fidohid.AuthEvent{}, results)
++	if result.OK || !errors.Is(err, disconnected) {
++		t.Fatalf("expected failed transport without authentication, got %+v, %v", result, err)
++	}
++}
+--- a/fidohid/fidohid.go
++++ b/fidohid/fidohid.go
+@@ -7,6 +7,7 @@
+ 	"fmt"
+ 	"io"
+ 	"log"
++	"sync"
+ 
+ 	"github.com/matejsmycka/linux-id/fidoauth"
+ 	"github.com/psanford/uhid"
+@@ -38,6 +39,7 @@
+ }
+ 
+ type SoftToken struct {
++	writeMu   sync.Mutex
+ 	device    *uhid.Device
+ 	evtChan   chan uhid.Event
+ 	authEvent chan AuthEvent
+@@ -111,7 +113,7 @@
+ 
+ 			resp := newInitResponse(chanID, nonce)
+ 
+-			err := writeRespose(t.device, reqChanID, CmdInit, resp.Marshal(), 0)
++			err := t.writeResponse(reqChanID, CmdInit, resp.Marshal(), 0)
+ 			if err != nil {
+ 				log.Printf("Write Init resp err: %s", err)
+ 				continue
+@@ -144,7 +146,7 @@
+ 			}
+ 		default:
+ 			log.Printf("unsuppoted cmd: %s %d", cmd, cmd)
+-			writeRespose(t.device, reqChanID, cmd, nil, swInsNotSupported)
++			t.writeResponse(reqChanID, cmd, nil, swInsNotSupported)
+ 		}
+ 	}
+ }
+@@ -158,14 +160,15 @@
+ 	frameTypeInit = 0x80
+ 	frameTypeCont = 0x00
+ 
+-	CmdPing  CmdType = 0x01 // Echo data through local processor only
+-	CmdMsg   CmdType = 0x03 // Send U2F message frame
+-	CmdLock  CmdType = 0x04 // Send lock channel command
+-	CmdInit  CmdType = 0x06 // Channel initialization
+-	CmdWink  CmdType = 0x08 // Send device identification wink
+-	CmdCbor  CmdType = 0x10 // Send encapsulated CTAP CBOR
+-	CmdSync  CmdType = 0x3c // Protocol resync command
+-	CmdError CmdType = 0x3f // Error response
++	CmdPing      CmdType = 0x01 // Echo data through local processor only
++	CmdMsg       CmdType = 0x03 // Send U2F message frame
++	CmdLock      CmdType = 0x04 // Send lock channel command
++	CmdInit      CmdType = 0x06 // Channel initialization
++	CmdWink      CmdType = 0x08 // Send device identification wink
++	CmdCbor      CmdType = 0x10 // Send encapsulated CTAP CBOR
++	CmdKeepalive CmdType = 0x3b // Keep a CTAP2 transaction alive while awaiting user presence
++	CmdSync      CmdType = 0x3c // Protocol resync command
++	CmdError     CmdType = 0x3f // Error response
+ 
+ 	vendorSpecificFirstCmd = 0x40
+ 	vendorSpecificLastCmd  = 0x7f
+@@ -431,7 +434,7 @@
+ 		MajorDeviceVersion: deviceMajor,
+ 		MinorDeviceVersion: deviceMinor,
+ 		BuildDeviceVersion: deviceBuild,
+-		RawCapabilities: cborCapability,
++		RawCapabilities:    cborCapability,
+ 	}
+ }
+ 
+@@ -451,14 +454,30 @@
+ }
+ 
+ func (t *SoftToken) WriteResponse(ctx context.Context, evt AuthEvent, data []byte, status uint16) error {
+-	return writeRespose(t.device, evt.chanID, evt.cmd, data, status)
++	return t.writeResponse(evt.chanID, evt.cmd, data, status)
++}
++
++// WriteKeepalive sends a HID status packet, not a final CBOR response.
++func (t *SoftToken) WriteKeepalive(ctx context.Context, evt AuthEvent, status byte) error {
++	if err := ctx.Err(); err != nil {
++		return err
++	}
++	return t.writeResponse(evt.chanID, CmdKeepalive, []byte{status}, 0)
++}
++
++// Keep each complete response together when the HID loop handles INIT while
++// the server is sending a keepalive or a multi-packet credential response.
++func (t *SoftToken) writeResponse(channel uint32, cmd CmdType, data []byte, status uint16) error {
++	t.writeMu.Lock()
++	defer t.writeMu.Unlock()
++	return writeRespose(t.device, channel, cmd, data, status)
+ }
+ 
+ // WriteCtap2Response sends a CTAP2 response: [1-byte status] + [CBOR payload].
+ // No trailing U2F status word is appended.
+ func (t *SoftToken) WriteCtap2Response(ctx context.Context, evt AuthEvent, status byte, data []byte) error {
+ 	payload := append([]byte{status}, data...)
+-	return writeRespose(t.device, evt.chanID, CmdCbor, payload, 0)
++	return t.writeResponse(evt.chanID, CmdCbor, payload, 0)
+ }
+ 
+ func writeRespose(d *uhid.Device, chanID uint32, cmd CmdType, data []byte, status uint16) error {

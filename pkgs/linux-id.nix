@@ -16,6 +16,8 @@ buildGoModule {
   };
 
   vendorHash = "sha256-vmWYSlCP09cVgQa7owAZeDzGfEdMHOqQlqDuzTkRjdI=";
+  # Keep browsers waiting while the user reaches the fingerprint reader.
+  patches = [ ./linux-id-keepalive.patch ];
   env.CGO_ENABLED = 0;
   ldflags = [
     "-s"

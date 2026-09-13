@@ -76,4 +76,10 @@ in
     source = create_symlink "${nixDir}/nix/home/cursor/LilpaTheme";
     recursive = true;
   };
+
+  xdg.dataFile."icons/LilpaTheme-Hyprcursor" = {
+    source = "${
+      pkgs.callPackage ./nix/home/cursor/hyprcursor.nix { }
+    }/share/icons/LilpaTheme-Hyprcursor";
+  };
 }

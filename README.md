@@ -233,6 +233,28 @@ key. Test authentication with the same passkey before adding one to a real accou
 No browser extension is needed. Fingerprint failure rejects the passkey attempt;
 use the website's other sign-in methods if necessary.
 
+For Google, **A passkey can't be created on this device** refers to the built-in
+platform authenticator. Choose **Use another device**, then **Security key** to
+use linux-id on this laptop. Touch an enrolled finger to the laptop's reader
+when the browser asks you to touch the security key; there is no separate
+fingerprint dialog. Google documents this flow under
+[Create a passkey on a security key](https://support.google.com/accounts/answer/13548313?hl=en).
+
+The package includes `pkgs/linux-id-keepalive.patch` so the virtual key sends
+progress messages while waiting for a fingerprint. Without these messages,
+Chromium can abandon the request before the 30-second fingerprint timeout.
+After applying the updated package, restart it with
+`systemctl --user restart linux-id` and retry registration. A journal message
+containing `fingerprint verification timed out` means verification did not
+complete; the service can remain running normally after this error.
+
+To include a newly added package patch before it is tracked by Git, rebuild from
+the repository root with `sudo nixos-rebuild switch --flake "path:$PWD#almanixos"`.
+If testing with the temporary service override
+`/run/user/1000/systemd/user/linux-id.service.d/90-passkey-keepalive.conf`, remove
+that file after rebuilding, then run `systemctl --user daemon-reload` and
+`systemctl --user restart linux-id`. The override also disappears on reboot.
+
 This is a community authenticator, not a built-in Brave or GNOME platform
 authenticator. Sites that require a platform authenticator, security-key PIN, or
 unsupported CTAP extensions may not work. Fingerprint verification is enforced by
