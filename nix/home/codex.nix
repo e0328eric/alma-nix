@@ -53,19 +53,12 @@ pkgs.stdenv.mkDerivation {
     (lib.getLib libsecret)
   ];
 
-  # ANGLE also loads graphics libraries dynamically from shared objects.
-  appendRunpaths = [
-    "${builtins.placeholder "out"}/lib/chatgpt"
-    (pkgs.lib.makeLibraryPath [
-      pkgs.libGL
-      pkgs.pciutils
-    ])
-  ];
-
   dontConfigure = true;
   dontBuild = true;
   dontStrip = true;
   dontWrapGApps = true;
+  # Run autoPatchelf explicitly before adding the graphics-only search paths.
+  dontAutoPatchelf = true;
 
   unpackPhase = ''
     runHook preUnpack
@@ -108,6 +101,33 @@ pkgs.stdenv.mkDerivation {
 
     # Keep the existing `codex` CLI available alongside the desktop app.
     ln -s chatgpt "$out/bin/codex-desktop"
+  '';
+
+  postFixup = ''
+    autoPatchelf "$out"
+
+    # Global appendRunpaths corrupts the bundled static PIE executables
+    # (codex, codex-code-mode-host and rg), causing SIGSEGV before main.
+    # Only ANGLE needs these extra paths for dynamically loaded graphics libraries.
+    for library in libEGL.so libGLESv2.so; do
+      patchelf --add-rpath "$out/lib/chatgpt:${
+        pkgs.lib.makeLibraryPath [
+          pkgs.libGL
+          pkgs.pciutils
+        ]
+      }" "$out/lib/chatgpt/$library"
+    done
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    "$out/lib/chatgpt/resources/codex" --version
+    "$out/lib/chatgpt/resources/codex-code-mode-host" --help > /dev/null
+    "$out/lib/chatgpt/resources/rg" --version
+
+    runHook postInstallCheck
   '';
 
   meta = with pkgs.lib; {
