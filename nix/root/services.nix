@@ -1,4 +1,19 @@
 { pkgs, ... }:
+let
+  fingerprintFirst = {
+    fprintAuth = true;
+    unixAuth = true;
+    # NixOS puts fprintd before password authentication. A failed scan or
+    # timeout falls through to pam_unix; a successful scan is enough to log in.
+    rules.auth.fprintd = {
+      control = "sufficient";
+      settings = {
+        max-tries = 3;
+        timeout = 10;
+      };
+    };
+  };
+in
 {
   services = {
     printing.enable = true; # cups
@@ -83,10 +98,11 @@
       ];
     };
   };
-    
-  # fingerprint pam support
+
+  # SDDM delegates authentication to the login PAM stack.
   security.pam.services = {
-    login.fprintAuth = true;
+    login = fingerprintFirst;
+    sudo = fingerprintFirst;
     # Home Manager enables Hyprlock, but the PAM service must exist system-wide.
     hyprlock = { };
   };

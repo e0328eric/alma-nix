@@ -29,6 +29,7 @@ in
     ./nix/root/packages.nix
     ./nix/root/game.nix
     ./nix/root/gnome-keyring.nix
+    ./nix/root/passkeys.nix
     ./nix/root/fhs
   ];
 

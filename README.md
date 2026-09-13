@@ -175,6 +175,19 @@ sudo virsh net-autostart default
 ```
 
 ### Fingerprint
+SDDM (through the `login` PAM service) and `sudo` try fingerprint authentication
+first. Three failed scans or a 10-second timeout falls back to password authentication.
+These settings also apply to TTY login, which uses the same `login` PAM service.
+
+For `sudo`, the password prompt appears after fingerprint authentication fails or
+times out. Use `sudo -k true` to test without a cached sudo authentication.
+
+In SDDM, select your user and press Enter with the password field empty to start
+the fingerprint scan. If it fails or times out, enter your password and submit
+again. SDDM starts a new authentication attempt, so let its fingerprint stage fail
+or time out before the submitted password is checked. SDDM does not display a new
+interactive password prompt during an ongoing authentication attempt.
+
 run `sudo fprintd-enroll -f right-index-finger "$USER"`.
 Here, the followings are available finger names
 
@@ -188,3 +201,53 @@ Here, the followings are available finger names
 - right-middle-finger
 - right-ring-finger
 - right-little-finger
+
+### Passkeys on this laptop
+
+`nix/root/passkeys.nix` runs [linux-id](https://github.com/matejsmycka/linux-id)
+as a user service. It exposes a virtual FIDO2 security key to browsers, using the
+laptop's TPM 2.0 for private keys and fprintd for fingerprint verification. GNOME
+Keyring continues to store browser secrets; it is separate from this authenticator.
+The Hyprland startup configuration also starts the service explicitly because this
+session does not activate `graphical-session.target`.
+
+Apply the configuration and reboot once so the `uhid` module, device permissions,
+and user service are active:
+
+```console
+sudo nixos-rebuild switch --flake ~/.nixos#almanixos
+reboot
+```
+
+Check that the service is running:
+
+```console
+systemctl --user status linux-id
+fido2-token -L
+```
+
+In Brave, open [the Yubico WebAuthn demo](https://demo.yubico.com/webauthn-technical/registration)
+and register a test passkey. Choose **Security key** when asked where to save it,
+then touch the laptop's fingerprint reader when the browser asks you to touch the
+key. Test authentication with the same passkey before adding one to a real account.
+No browser extension is needed. Fingerprint failure rejects the passkey attempt;
+use the website's other sign-in methods if necessary.
+
+This is a community authenticator, not a built-in Brave or GNOME platform
+authenticator. Sites that require a platform authenticator, security-key PIN, or
+unsupported CTAP extensions may not work. Fingerprint verification is enforced by
+the daemon, not by a hardware-isolated biometric system. The daemon briefly caches
+successful fingerprint verification for browser retries (five seconds).
+
+Resident credentials are stored in `~/.config/linux-id/creds.json`; back up this
+directory. The credentials can only be used with the original TPM, so clearing the
+TPM or replacing the motherboard can make them unusable even with a file backup.
+Keep an additional passkey or recovery method on important accounts.
+
+For troubleshooting or to temporarily remove the virtual key:
+
+```console
+journalctl --user -u linux-id -b
+systemctl --user stop linux-id
+systemctl --user start linux-id
+```
