@@ -3,6 +3,7 @@
 { pkgs, lib, ... }:
 let
   synologyDriveClient = pkgs.callPackage ./synology-drive.nix { };
+  codexDesktop = pkgs.callPackage ./codex.nix { };
   freeoffice = pkgs.callPackage ./freeoffice.nix { };
   comfyui = pkgs.callPackage ./comfyui.nix { };
   vesti-fhs = import ./vesti-fhs.nix { inherit pkgs; };
@@ -16,6 +17,7 @@ in
     cloc
     claude-code
     codex
+    codexDesktop
     dunst
     eza
     fastfetch
