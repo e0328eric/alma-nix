@@ -21,7 +21,7 @@ pkgs.buildFHSEnv {
     pkgs:
     (with pkgs; [
       stdenv.cc.cc.lib
-      icu76
+      icu78
       fontconfig
       harfbuzz
       freetype
