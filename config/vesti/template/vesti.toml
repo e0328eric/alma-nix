@@ -1,0 +1,10 @@
+name = "template"
+version = "1.0.2"
+
+[[exports]]
+name = "font.ves"
+location = "."
+
+[[exports]]
+name = "before.lua"
+location = "."

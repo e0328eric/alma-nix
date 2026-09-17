@@ -25,6 +25,7 @@ in
     freeoffice
     fzf
     gdb
+    herdr
     iconv
     imagemagick
     kdePackages.kdeconnect-kde

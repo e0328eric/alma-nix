@@ -1,0 +1,15 @@
+name = "coprime"
+version = "3.0.2"
+
+[[exports]]
+name = "coprime-math.sty"
+
+[[exports]]
+name = "coprime-reference.sty"
+
+[[exports]]
+name = "coprime.cls"
+
+[[exports]]
+name = "fancythm.sty"
+
