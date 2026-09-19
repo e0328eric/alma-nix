@@ -49,9 +49,7 @@ in
   home.sessionPath = [ "$HOME/.cargo/bin" ];
 
   services.dunst.enable = true;
-  services.vicinae = {
-    enable = true;
-  };
+  programs.vicinae.enable = true;
 
   # NOTE: home-manager does not delete symlink automatically in case of some
   # error. So if you want to remove symlink generated from here, you should
