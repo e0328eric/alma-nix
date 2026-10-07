@@ -7,7 +7,7 @@ pkgs.stdenv.mkDerivation {
     url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
     # This URL tracks latest; update the version and hash together when upgrading.
     # Get the new hash with: nix-prefetch-url <url>
-    sha256 = "sha256-2je457zvquoBnEeMrL5sc+4d3RXg4euzx+8KQt2BisI=";
+    sha256 = "sha256-uQqA+TU7wSpaW4RpUCqOV5SjxUo3HIiA4JTVAN5pW7g=";
   };
 
   nativeBuildInputs = with pkgs; [

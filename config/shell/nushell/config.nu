@@ -406,7 +406,7 @@ $env.config = {
             }
         }
         {
-            name: move_left
+            name: move_left_none_left
             modifier: none
             keycode: left
             mode: [emacs, vi_normal, vi_insert]
@@ -451,13 +451,6 @@ $env.config = {
         }
         {
             name: move_to_line_start
-            modifier: none
-            keycode: home
-            mode: [emacs, vi_normal, vi_insert]
-            event: { edit: movetolinestart }
-        }
-        {
-            name: move_to_line_start
             modifier: control
             keycode: char_a
             mode: [emacs, vi_normal, vi_insert]
@@ -476,7 +469,7 @@ $env.config = {
             }
         }
         {
-            name: move_to_line_end_or_take_history_hint
+            name: move_to_line_end_or_take_history_hint_ctrl
             modifier: control
             keycode: char_e
             mode: [emacs, vi_normal, vi_insert]
@@ -488,13 +481,6 @@ $env.config = {
             }
         }
         {
-            name: move_to_line_start
-            modifier: control
-            keycode: home
-            mode: [emacs, vi_normal, vi_insert]
-            event: { edit: movetolinestart }
-        }
-        {
             name: move_to_line_end
             modifier: control
             keycode: end
@@ -502,7 +488,7 @@ $env.config = {
             event: { edit: movetolineend }
         }
         {
-            name: move_up
+            name: move_up_ctrl
             modifier: control
             keycode: char_p
             mode: [emacs, vi_normal, vi_insert]
@@ -514,7 +500,7 @@ $env.config = {
             }
         }
         {
-            name: move_down
+            name: move_down_ctrl
             modifier: control
             keycode: char_t
             mode: [emacs, vi_normal, vi_insert]
@@ -533,7 +519,7 @@ $env.config = {
             event: { edit: backspace }
         }
         {
-            name: delete_one_word_backward
+            name: delete_one_word_backward_ctrl
             modifier: control
             keycode: backspace
             mode: [emacs, vi_insert]
@@ -547,21 +533,21 @@ $env.config = {
             event: { edit: delete }
         }
         {
-            name: delete_one_character_forward
+            name: delete_one_character_forward_ctrl_delete
             modifier: control
             keycode: delete
             mode: [emacs, vi_insert]
             event: { edit: delete }
         }
         {
-            name: delete_one_character_backward
+            name: delete_one_character_backward_ctrl_delete
             modifier: control
             keycode: char_h
             mode: [emacs, vi_insert]
             event: { edit: backspace }
         }
         {
-            name: delete_one_word_backward
+            name: delete_one_word_backward_ctrl_delete_ctrl_delete
             modifier: control
             keycode: char_w
             mode: [emacs, vi_insert]
@@ -582,7 +568,7 @@ $env.config = {
             event: { send: enter }
         }
         {
-            name: move_left
+            name: move_left_ctrl
             modifier: control
             keycode: char_b
             mode: emacs
@@ -590,19 +576,6 @@ $env.config = {
                 until: [
                     { send: menuleft }
                     { send: left }
-                ]
-            }
-        }
-        {
-            name: move_right_or_take_history_hint
-            modifier: control
-            keycode: char_f
-            mode: emacs
-            event: {
-                until: [
-                    { send: historyhintcomplete }
-                    { send: menuright }
-                    { send: right }
                 ]
             }
         }
@@ -656,44 +629,6 @@ $env.config = {
             event: { edit: swapgraphemes }
         }
         {
-            name: move_one_word_left
-            modifier: alt
-            keycode: left
-            mode: emacs
-            event: { edit: movewordleft }
-        }
-        {
-            name: move_one_word_right_or_take_history_hint
-            modifier: alt
-            keycode: right
-            mode: emacs
-            event: {
-                until: [
-                    { send: historyhintwordcomplete }
-                    { edit: movewordright }
-                ]
-            }
-        }
-        {
-            name: move_one_word_left
-            modifier: alt
-            keycode: char_b
-            mode: emacs
-            event: { edit: movewordleft }
-        }
-        {
-            name: move_one_word_right_or_take_history_hint
-            modifier: alt
-            keycode: char_f
-            mode: emacs
-            event: {
-                until: [
-                    { send: historyhintwordcomplete }
-                    { edit: movewordright }
-                ]
-            }
-        }
-        {
             name: delete_one_word_forward
             modifier: alt
             keycode: delete
@@ -704,13 +639,6 @@ $env.config = {
             name: delete_one_word_backward
             modifier: alt
             keycode: backspace
-            mode: emacs
-            event: { edit: backspaceword }
-        }
-        {
-            name: delete_one_word_backward
-            modifier: alt
-            keycode: char_m
             mode: emacs
             event: { edit: backspaceword }
         }
@@ -781,6 +709,7 @@ $env.config = {
         }
     ]
 }
+
 
 alias v         = nvim
 alias s         = ls
