@@ -3,7 +3,7 @@
   lib,
   pkgs,
   inputs,
- ...
+  ...
 }:
 let
   nix_vars = import ./variables.nix;
@@ -34,9 +34,9 @@ in
   ];
 
   # set permitions for /game directory
-  #systemd.tmpfiles.rules = [
-  #  "d /game 0755 almagest users -"
-  #];
+  systemd.tmpfiles.rules = [
+    "d /game 0755 almagest users -"
+  ];
 
   nix.settings = {
     builders-use-substitutes = true;
