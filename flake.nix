@@ -5,7 +5,6 @@
     nixpkgs.url = "nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     stylix.url = "github:danth/stylix";
-    vicinae.url = "github:vicinaehq/vicinae";
     honkai-railway-grub-theme.url = "github:voidlhf/StarRailGrubThemes";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -29,7 +28,6 @@
     {
       nixpkgs,
       nixos-hardware,
-      vicinae,
       stylix,
       mangowm,
       aagl,
@@ -103,7 +101,6 @@
                 {
                   imports = [
                     ./home.nix
-                    vicinae.homeManagerModules.default
                   ];
                 };
               backupFileExtension = "backup";

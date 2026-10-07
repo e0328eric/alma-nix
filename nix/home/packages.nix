@@ -59,6 +59,7 @@ in
     typst
     unzip
     upx
+    vicinae
     vlc
     wlroots
     yt-dlp
