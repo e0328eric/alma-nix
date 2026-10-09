@@ -1,6 +1,5 @@
 hl.on("hyprland.start", function ()
   hl.exec_cmd("kanshi")
-  hl.exec_cmd("expressvpnd")
   --hl.exec_cmd("awww-daemon --format xrgb")
   hl.exec_cmd("fcitx5 -d")
   hl.exec_cmd("vicinae server")

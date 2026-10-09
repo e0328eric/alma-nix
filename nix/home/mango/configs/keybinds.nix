@@ -46,14 +46,15 @@ let
       bind = SUPER           , E     , spawn_shell, ${filemanager}
       bind = SUPER+SHIFT     , Q     , killclient
       bind = SUPER+SHIFT     , X     , spawn_shell, noctalia msg session lock
-      
+
       bind = SUPER+SHIFT     , R     , reload_config
     ''
   ];
   screenshots = [
     ''
       # screenshots
-      bind = SUPER+SHIFT     , P, spawn_shell, noctalia msg screenshot-region
+      bind = SUPER+SHIFT, S, spawn_shell, noctalia msg screenshot-region
+      bind = SUPER      , S, spawn_shell, noctalia msg screenshot-fullscreen pick
     ''
   ];
   windowState = [
@@ -65,7 +66,7 @@ let
 
       # Set specific layout
       bind = SUPER, T, setlayout, tile
-      bind = SUPER, S, setlayout, scroller
+      bind = SUPER+CTRL, S, setlayout, scroller
     ''
   ];
   windowMovement = [
@@ -131,9 +132,9 @@ let
       bind = SUPER+ALT+SHIFT, down , resizewin, (0,+10)
 
       # resize windows for scroller mode
-      bind = SUPER+SHIFT,      S, switch_proportion_preset
-      bind = SUPER+CTRL,       S, spawn_shell, mmsg -s -d set_proportion,0.75
-      bind = SUPER+SHIFT+CTRL, S, spawn_shell, mmsg -s -d set_proportion,0.25
+      bind = SUPER+SHIFT,      E, switch_proportion_preset
+      bind = SUPER+CTRL,       E, spawn_shell, mmsg -s -d set_proportion,0.75
+      bind = SUPER+SHIFT+CTRL, E, spawn_shell, mmsg -s -d set_proportion,0.25
     ''
   ];
   mediaControl = [
@@ -141,7 +142,7 @@ let
       # media transport
       bind = NONE, XF86AudioPrev , spawn_shell, playerctl previous
       bind = NONE, XF86AudioNext , spawn_shell, playerctl next
-      bind = NONE, XF86AudioPause, spawn_shell, playerctl play-pause
+      #bind = NONE, XF86AudioPause, spawn_shell, playerctl play-pause
       bind = NONE, XF86AudioPlay , spawn_shell, playerctl play-pause
     ''
   ];
@@ -172,16 +173,16 @@ let
     ''
   ];
   volumeBrightness = [
-      ''
-        # volume / brightness
-        bind=NONE,XF86AudioRaiseVolume,spawn_shell,${scripts}/VolumeBrightnessPlain.sh volume_up
-        bind=NONE,XF86AudioLowerVolume,spawn_shell,${scripts}/VolumeBrightnessPlain.sh volume_down
-        bind=NONE,XF86AudioMute,spawn_shell,${scripts}/VolumeBrightnessPlain.sh volume_mute
-        bind=NONE,XF86AudioMicMute,spawn_shell,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-        bind=NONE,XF86MonBrightnessUp,spawn_shell,${scripts}/VolumeBrightnessPlain.sh brightness_up
-        bind=NONE,XF86MonBrightnessDown,spawn_shell,${scripts}/VolumeBrightnessPlain.sh brightness_down
-      ''
-    ];
+    ''
+      # volume / brightness
+      bind=NONE,XF86AudioRaiseVolume,spawn_shell,${scripts}/VolumeBrightnessPlain.sh volume_up
+      bind=NONE,XF86AudioLowerVolume,spawn_shell,${scripts}/VolumeBrightnessPlain.sh volume_down
+      bind=NONE,XF86AudioMute,spawn_shell,${scripts}/VolumeBrightnessPlain.sh volume_mute
+      bind=NONE,XF86AudioMicMute,spawn_shell,wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+      bind=NONE,XF86MonBrightnessUp,spawn_shell,${scripts}/VolumeBrightnessPlain.sh brightness_up
+      bind=NONE,XF86MonBrightnessDown,spawn_shell,${scripts}/VolumeBrightnessPlain.sh brightness_down
+    ''
+  ];
 in
 lib.concatStringsSep "\n" (
   builtins.concatLists [

@@ -26,24 +26,21 @@ in
     ./configs/monitors.nix
   ];
 
-  home.packages =
-    with pkgs;
-    [
-      inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
-      mako
-      networkmanagerapplet
-      mpv
-      nemo
-      nemo-preview
-      wl-clipboard
-      playerctl
-      grim
-      wlr-randr
-      kanshi
-      eens
-      #wallpaperSuffler # TODO: later update this for mango
-      inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-    ];
+  home.packages = with pkgs; [
+    mako
+    networkmanagerapplet
+    mpv
+    nemo
+    nemo-preview
+    wl-clipboard
+    playerctl
+    grim
+    wlr-randr
+    kanshi
+    eens
+    #wallpaperSuffler # TODO: later update this for mango
+    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
 
   xdg.configFile."mango/config.conf".text = ''
     # Autostarts
