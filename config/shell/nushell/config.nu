@@ -161,7 +161,8 @@ $env.config = {
         osc2: true
         osc7: true
         osc8: true
-        osc9_9: true
+        # OSC 9;9 is interpreted as a desktop notification by some terminals.
+        osc9_9: false
         # wezterm and nushell makes weird error if this is "true"
         osc133: false
         osc633: true

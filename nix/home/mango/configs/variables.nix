@@ -9,8 +9,7 @@ rec {
   # Programs
   filemanager = "nemo";
   applauncher = "vicinae toggle"; # Assuming vicinae is in your path
-  #terminal = "kitty";
-  terminal = "ghostty";
+  terminal = "kitty";
   browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime";
   private_browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --incognito";
   #browser = "qutebrowser";
