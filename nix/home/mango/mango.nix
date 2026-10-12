@@ -43,6 +43,9 @@ in
   ];
 
   xdg.configFile."mango/config.conf".text = ''
+    # Render XWayland apps at the monitor's native resolution.
+    xwayland_ignore_scale = 1
+
     # Autostarts
     ${autostartModule}
 
