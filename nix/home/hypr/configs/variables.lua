@@ -3,7 +3,7 @@ local home = os.getenv("HOME")
 
 M.mainmod = "SUPER"
 M.terminal = "kitty"
-M.filemanager = "nemo"
+M.filemanager = "caja"
 M.applauncher = "vicinae toggle"
 M.browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime"
 M.private_browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --incognito"
