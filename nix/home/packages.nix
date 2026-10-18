@@ -11,6 +11,7 @@ in
 {
   home.packages = with pkgs; [
     #aegisub
+    android-file-transfer
     brave
     brightnessctl
     (btop.override { cudaSupport = true; })

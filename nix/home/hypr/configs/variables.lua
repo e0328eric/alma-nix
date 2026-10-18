@@ -2,7 +2,7 @@ local M = {}
 local home = os.getenv("HOME")
 
 M.mainmod = "SUPER"
-M.terminal = "kitty"
+M.terminal = "ghostty"
 M.filemanager = "caja"
 M.applauncher = "vicinae toggle"
 M.browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime"
