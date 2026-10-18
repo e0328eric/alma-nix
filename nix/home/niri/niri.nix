@@ -21,24 +21,21 @@ let
 in
 {
   # Ensure necessary packages are installed
-  home.packages =
-    with pkgs;
-    [
-      inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
-      alacritty # default terminal for niri
-      mako
-      networkmanagerapplet
-      mpv
-      nemo
-      nemo-preview
-      wl-clipboard
-      playerctl
-      kanshi
-      grim
-      xwayland-satellite
-      wallpaperSuffler
-      inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-    ];
+  home.packages = with pkgs; [
+    inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
+    alacritty # default terminal for niri
+    mako
+    networkmanagerapplet
+    mpv
+    caja
+    wl-clipboard
+    playerctl
+    kanshi
+    grim
+    xwayland-satellite
+    wallpaperSuffler
+    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
 
   # generate niri config.kdl
   xdg.configFile."niri/config.kdl".text = ''

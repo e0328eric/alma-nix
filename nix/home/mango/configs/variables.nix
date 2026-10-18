@@ -7,9 +7,9 @@ rec {
   wallpapers = "${home}/.config/alma-wallpapers";
 
   # Programs
-  filemanager = "nemo";
+  filemanager = "caja";
   applauncher = "vicinae toggle"; # Assuming vicinae is in your path
-  terminal = "kitty";
+  terminal = "ghostty";
   browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime";
   private_browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --incognito";
   #browser = "qutebrowser";

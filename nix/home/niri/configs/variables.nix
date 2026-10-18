@@ -7,7 +7,7 @@ rec {
   wallpapers = "${home}/.config/alma-wallpapers";
 
   # Programs
-  filemanager = "nemo";
+  filemanager = "caja";
   applauncher = ''vicinae" "toggle''; # Assuming vicinae is in your path
   #terminal = "kitty";
   terminal = "ghostty";

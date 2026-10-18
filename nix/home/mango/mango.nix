@@ -30,8 +30,7 @@ in
     mako
     networkmanagerapplet
     mpv
-    nemo
-    nemo-preview
+    caja
     wl-clipboard
     playerctl
     grim
