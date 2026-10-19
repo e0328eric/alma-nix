@@ -5,7 +5,7 @@
   nixosHardwareModule = "lenovo-legion-16irx9h";
   #shell = "fish";
   shell = "nushell";
-  #mainWm = "mango";
-  mainWm = "hyprland";
+  mainWm = "mango";
+  #mainWm = "hyprland";
   #mainWm = "niri";
 }
