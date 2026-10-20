@@ -711,6 +711,12 @@ $env.config = {
     ]
 }
 
+# usage: { zathura ./foo.pdf } | balez
+def balez []: closure -> int {
+  let task = $in;
+  job spawn $task;
+}
+
 
 alias v         = nvim
 alias s         = ls
