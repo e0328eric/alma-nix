@@ -19,6 +19,7 @@ in
     claude-code
     codex
     codexDesktop
+    discord
     dunst
     eza
     fastfetch

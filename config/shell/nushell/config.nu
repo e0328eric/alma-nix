@@ -742,6 +742,7 @@ alias homework     = cd ~/pCloud/TeX_Documents/Homework
 alias teachingf    = cd ~/pCloud/TeX_Documents/TF
 alias seminar      = cd ~/pCloud/TeX_Documents/Seminar
 alias kindergarten = cd ~/pCloud/TeX_Documents/Kindergarten
+alias papers       = cd ~/pCloud/TeX_Documents/Papers
 
 mkdir ($nu.data-dir | path join "vendor/autoload")
 

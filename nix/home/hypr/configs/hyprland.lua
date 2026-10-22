@@ -210,6 +210,11 @@ hl.window_rule({
     float = true,
 })
 
+hl.window_rule({
+    match = { tag = "cursorlocked" },
+    confine_pointer = true,
+})
+
 hl.curve(
     "my_bezier",
     {

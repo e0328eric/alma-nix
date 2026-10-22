@@ -50,6 +50,8 @@ bind({ SHIFT, "tab" },       hl.dsp.layout("swapcol r"))
 bind({ CTRL, "tab" },        hl.dsp.layout("colresize +conf"))
 bind({ CTRL, SHIFT, "tab" }, hl.dsp.layout("colresize -conf"))
 
+bind({ SHIFT, "P" }, hl.dsp.window.tag({ tag = "cursorlocked" }))
+
 for i = 1, 10 do
     local key = i % 10 -- 10 maps to key 0
     bind({ key },        hl.dsp.focus({ workspace = i }))
