@@ -6,6 +6,6 @@
   #shell = "fish";
   shell = "nushell";
   #mainWm = "mango";
-  #mainWm = "hyprland";
-  mainWm = "niri";
+  mainWm = "hyprland";
+  #mainWm = "niri";
 }
