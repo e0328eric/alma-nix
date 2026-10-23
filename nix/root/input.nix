@@ -13,10 +13,19 @@
       enable = true;
       keyboards.default = {
         ids = [ "*" ];
-        settings.main = {
-          capslock = "esc";
-          esc = "capslock";
-          rightshift = "\\";
+        settings = {
+          main = {
+            capslock = "esc";
+            esc = "capslock";
+            rightshift = "\\";
+          };
+
+          "control+alt".f12 = "toggle(game)";
+
+          game = {
+            capslock = "leftshift";
+            f4 = "esc";
+          };
         };
       };
     };

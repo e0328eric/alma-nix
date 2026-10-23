@@ -22,7 +22,6 @@ in
 {
   # Ensure necessary packages are installed
   home.packages = with pkgs; [
-    inputs.awww.packages.${pkgs.stdenv.hostPlatform.system}.awww
     alacritty # default terminal for niri
     mako
     networkmanagerapplet

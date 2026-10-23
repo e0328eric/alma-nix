@@ -58,4 +58,37 @@ in
     source = create_symlink "${nixDir}/nix/home/hypr/configs/env.lua";
     recursive = true;
   };
+
+  # xdg-desktop-portal.service has Requisite=graphical-session.target, so the
+  # portal (and OBS screen capture) refuses to start unless something binds
+  # graphical-session.target. Started from autostart.lua.
+  systemd.user.targets.hyprland-session = {
+    Unit = {
+      Description = "Hyprland compositor session";
+      Documentation = [ "man:systemd.special(7)" ];
+      BindsTo = [ "graphical-session.target" ];
+      Wants = [ "graphical-session-pre.target" ];
+      After = [ "graphical-session-pre.target" ];
+    };
+  };
+
+  xdg.portal = {
+    enable = true;
+
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-hyprland
+      xdg-desktop-portal-gtk
+    ];
+
+    config.hyprland = {
+      default = [
+        "hyprland"
+        "gtk"
+      ];
+
+      "org.freedesktop.impl.portal.ScreenCast" = [ "hyprland" ];
+      "org.freedesktop.impl.portal.Screenshot" = [ "hyprland" ];
+      "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+    };
+  };
 }
