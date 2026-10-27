@@ -6,7 +6,6 @@ let
   codexDesktop = pkgs.callPackage ./codex.nix { };
   freeoffice = pkgs.callPackage ./freeoffice.nix { };
   comfyui = pkgs.callPackage ./comfyui.nix { };
-  vesti-fhs = import ./vesti-fhs.nix { inherit pkgs; };
 in
 {
   home.packages = with pkgs; [
@@ -71,7 +70,6 @@ in
     zenity
     zip
     (pkgs.writeShellScriptBin "ns" (builtins.readFile "${pkgs.nix-search-tv.src}/nixpkgs.sh"))
-    vesti-fhs
     python313Packages.black
   ];
 }

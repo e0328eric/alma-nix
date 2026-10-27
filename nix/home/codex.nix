@@ -7,7 +7,7 @@ pkgs.stdenv.mkDerivation {
     url = "https://persistent.oaistatic.com/codex-app-prod/linux/deb/latest/chatgpt_amd64.deb";
     # This URL tracks latest; update the version and hash together when upgrading.
     # Get the new hash with: nix-prefetch-url <url>
-    sha256 = "sha256-uQqA+TU7wSpaW4RpUCqOV5SjxUo3HIiA4JTVAN5pW7g=";
+    sha256 = "sha256-6wgxxzTxVPk/jrzw4X0RjaDep9wXN9xhoecURDdb8ZA=";
   };
 
   nativeBuildInputs = with pkgs; [
@@ -40,9 +40,11 @@ pkgs.stdenv.mkDerivation {
     libxkbcommon
     nspr
     nss
+    openssl
     pango
     stdenv.cc.cc.lib
     systemd
+    tpm2-tss
   ];
 
   # Libraries loaded dynamically by Chromium and its native modules.

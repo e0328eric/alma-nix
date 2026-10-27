@@ -48,6 +48,21 @@
     in
     {
       overlays.default = final: prev: {
+        linuxPackages_latest = prev.linuxPackages_latest.extend (kernelFinal: kernelPrev: {
+          lenovo-legion-module = kernelPrev.lenovo-legion-module.overrideAttrs (oldAttrs: {
+            # Use Kbuild to install, strip and sign the module. The upstream
+            # installer only copies the .ko, leaving out its required .ko.cer.
+            installFlags = (oldAttrs.installFlags or [ ]) ++ [
+              "-C"
+              "${kernelFinal.kernel.dev}/lib/modules/${kernelFinal.kernel.modDirVersion}/build"
+              "M=$(PWD)"
+              "INSTALL_MOD_PATH=${placeholder "out"}"
+              "INSTALL_MOD_DIR=kernel/drivers/platform/x86"
+            ];
+            installTargets = [ "modules_install" ];
+          });
+        });
+
         winetricks-git = final.callPackage ./pkgs/winetricks-git.nix { };
         protonplus-git = final.callPackage ./pkgs/protonplus.nix { };
 
