@@ -30,4 +30,10 @@
       };
     };
   };
+
+  # keyd-application-mapper (per-app bindings, see nix/home/emacs.nix) talks to
+  # keyd's socket, which is owned by the keyd group. keyd needs CAP_SETGID to
+  # hand the socket to that group.
+  users.groups.keyd = { };
+  systemd.services.keyd.serviceConfig.CapabilityBoundingSet = [ "CAP_SETGID" ];
 }

@@ -10,6 +10,7 @@ let
     terminal
     browser
     private_browser
+    editor
     applauncher
     filemanager
     scripts
@@ -42,6 +43,7 @@ let
       bind = SUPER           , Return, spawn_shell, ${terminal}
       bind = SUPER+SHIFT     , Return, spawn_shell, ${browser}
       bind = SUPER+CTRL+SHIFT, Return, spawn_shell, ${private_browser}
+      bind = SUPER+CTRL      , Return, spawn_shell, ${editor}
       bind = SUPER           , Space , spawn_shell, ${applauncher}
       bind = SUPER           , E     , spawn_shell, ${filemanager}
       bind = SUPER+SHIFT     , Q     , killclient

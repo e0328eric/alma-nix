@@ -718,7 +718,7 @@ def balez []: closure -> int {
 }
 
 
-alias v         = ae
+alias v         = emacsclient -t
 alias s         = ls
 alias l         = ls -al
 alias lg        = lazygit

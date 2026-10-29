@@ -10,6 +10,7 @@ rec {
   filemanager = "caja";
   applauncher = "vicinae toggle"; # Assuming vicinae is in your path
   terminal = "ghostty";
+  editor = "emacsclient -c";
   browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime";
   private_browser = "brave --enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime --incognito";
   #browser = "qutebrowser";
