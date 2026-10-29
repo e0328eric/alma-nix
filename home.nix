@@ -32,6 +32,7 @@ in
 
   imports = [
     ./nix/home/env.nix
+    ./nix/home/emacs.nix
     ./nix/home/packages.nix
     ./nix/home/mime.nix
     ./nix/home/git.nix

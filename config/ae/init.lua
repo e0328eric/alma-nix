@@ -23,7 +23,7 @@
 -- ---------- editor options ----------
 ae.set_number("hybrid")     -- "none" | "absolute" | "relative" | "hybrid"
 ae.set_scrolloff(3)         -- keep N lines of context above/below the cursor
-ae.set_colorcolumn(90)      -- 0 = off; e.g. 80 tints column 80
+ae.set_colorcolumn(100)      -- 0 = off; e.g. 80 tints column 80
 ae.set_textwidth(0)         -- 0 = off; e.g. 80 hard-wraps typed text at 80
 ae.set_autoindent(true)     -- new lines inherit the previous line's indent
 ae.set_format_on_save(true) -- format via the language server on write
@@ -31,8 +31,13 @@ ae.set_wrap(true)           -- soft wrap
 
 -- the second parameter denoting the filetype (the extension of the file)
 -- with comma separated. (e.g. "rs" or "rs,py")
-ae.set_colorcolumn(80, "ves")
-ae.set_textwidth(80, "ves")
+local language = {
+    "ves", "tex",
+}
+for _, lang in ipairs(language) do
+    ae.set_colorcolumn(100, lang)
+    ae.set_textwidth(100, lang)
+end
 
 -- ---------- locate this config's directory ----------
 -- The editor hands us the config directory in `ae.config_dir` (with a

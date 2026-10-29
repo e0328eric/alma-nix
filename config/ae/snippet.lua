@@ -47,11 +47,11 @@ ae.snippet("doc", [==[
 $0
 \end{document}]==])
 
--- a generic environment: $1 opens it, $3 closes it (no mirroring), $2 body
+-- a generic environment
 ae.snippet("beg", [==[
 \begin{$1}
-    $2
-\end{$3}]==])
+    $0
+\end{$1}]==])
 
 -- common fixed-name environments (no name to retype)
 ae.snippet("eq", [==[
@@ -105,7 +105,7 @@ local TEX = "tex,latex,ves"
 ae.snippet("be", [==[\[
     $1
 \]
-$0]==],                                       TEX)  -- display math
+$0]==], TEX)  -- display math
 
 -- ----------------------------------------------------------------------
 -- AUTO-EXPANDING snippets (no <tab>): they fire the instant the trigger is
@@ -115,4 +115,4 @@ $0]==],                                       TEX)  -- display math
 -- not inside a word; symbol triggers (like "//") fire anywhere. NOTE: there
 -- is no math-mode detection, so these expand anywhere in the file.
 -- ----------------------------------------------------------------------
-ae.autosnippet("MK",  "$$1$$0",                 TEX)  -- inline math:  MK -> $|$
+ae.autosnippet("MK",  "$$1$$0", TEX)  -- inline math:  MK -> $|$
