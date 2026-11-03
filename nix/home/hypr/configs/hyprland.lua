@@ -1,4 +1,3 @@
-require("plugins")
 require("autostart")
 require("env")
 require("keybindings")
