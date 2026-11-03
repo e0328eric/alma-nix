@@ -81,6 +81,9 @@ in
 
   # enable to download vivaldi
   nixpkgs.config.allowUnfree = true;
+  # gtk2 is marked broken (EOL); still needed by lutris' FHS env and the
+  # matlab/mathematica FHS envs. Must be gone before NixOS 27.05.
+  nixpkgs.config.problems.handlers."gtk+".broken = "warn";
 
   # Open ports in the firewall.
   networking.firewall.enable = true;

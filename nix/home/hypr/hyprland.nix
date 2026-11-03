@@ -58,6 +58,10 @@ in
     source = create_symlink "${nixDir}/nix/home/hypr/configs/env.lua";
     recursive = true;
   };
+  # Generated here because plugin paths live in the nix store.
+  xdg.configFile."hypr/plugins.lua".text = ''
+    hl.plugin.load("${pkgs.hypr3d}/lib/hypr3d.so")
+  '';
 
   # xdg-desktop-portal.service has Requisite=graphical-session.target, so the
   # portal (and OBS screen capture) refuses to start unless something binds

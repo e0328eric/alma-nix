@@ -25,7 +25,6 @@ in
     ffmpeg
     fzf
     gdb
-    grist
     herdr
     iconv
     imagemagick

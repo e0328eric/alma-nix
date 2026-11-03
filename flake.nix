@@ -22,6 +22,11 @@
       url = "github:ezKEa/aagl-gtk-on-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    # Source only: built against nixpkgs' hyprland in pkgs/hypr3d.nix.
+    hypr3d = {
+      url = "github:samine825/Hypr3D";
+      flake = false;
+    };
   };
 
   outputs =
@@ -65,6 +70,7 @@
 
         winetricks-git = final.callPackage ./pkgs/winetricks-git.nix { };
         protonplus-git = final.callPackage ./pkgs/protonplus.nix { };
+        hypr3d = final.callPackage ./pkgs/hypr3d.nix { src = inputs.hypr3d; };
 
         lutris-unwrapped-new = prev.lutris-unwrapped.overrideAttrs (old: rec {
           version = "0.5.22";
