@@ -12,7 +12,6 @@ in
     extraGroups = [
       "wheel" # Enable ‘sudo’ for the user.
       "docker"
-      "keyd" # for keyd-application-mapper
     ];
     packages = with pkgs; [
       tree

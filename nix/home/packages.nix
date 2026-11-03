@@ -4,7 +4,6 @@
 let
   synologyDriveClient = pkgs.callPackage ./synology-drive.nix { };
   codexDesktop = pkgs.callPackage ./codex.nix { };
-  freeoffice = pkgs.callPackage ./freeoffice.nix { };
   comfyui = pkgs.callPackage ./comfyui.nix { };
 in
 {
@@ -14,6 +13,7 @@ in
     brave
     brightnessctl
     (btop.override { cudaSupport = true; })
+    cdecl
     cloc
     claude-code
     codex
@@ -23,9 +23,9 @@ in
     eza
     fastfetch
     ffmpeg
-    freeoffice
     fzf
     gdb
+    grist
     herdr
     iconv
     imagemagick
