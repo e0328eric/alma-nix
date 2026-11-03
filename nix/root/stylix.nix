@@ -10,5 +10,8 @@
     image = ../../wallpapers/columbina-moonlit-requiem.png;
     polarity = "dark"; # Forcing dark mode
     targets.grub.enable = false;
+    # The fish target injects base16-shell into /etc/fish/config.fish, which
+    # repaints the terminal palette via OSC escapes and overrides Ghostty's theme.
+    targets.fish.enable = false;
   };
 }
