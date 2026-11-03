@@ -52,11 +52,6 @@ bind({ CTRL, SHIFT, "tab" }, hl.dsp.layout("colresize -conf"))
 
 bind({ SHIFT, "P" }, hl.dsp.window.tag({ tag = "cursorlocked" }))
 
--- Hypr3D (loaded in plugins.lua); nil on the first pass before the plugin loads
-if hl.plugin.hypr3d then
-    bind({ "F12" }, hl.plugin.hypr3d.toggle)
-end
-
 for i = 1, 10 do
     local key = i % 10 -- 10 maps to key 0
     bind({ key },        hl.dsp.focus({ workspace = i }))

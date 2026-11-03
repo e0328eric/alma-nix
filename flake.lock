@@ -275,22 +275,6 @@
         "type": "github"
       }
     },
-    "hypr3d": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1793442259,
-        "narHash": "sha256-km43LhIZvhfWmSKyOS0BBgB1+CjpSAacXGz6oxwF6sk=",
-        "owner": "samine825",
-        "repo": "Hypr3D",
-        "rev": "1e9559cc039947fa632477dcea11e10f823a5ccc",
-        "type": "github"
-      },
-      "original": {
-        "owner": "samine825",
-        "repo": "Hypr3D",
-        "type": "github"
-      }
-    },
     "mangowm": {
       "inputs": {
         "flake-parts": "flake-parts",
@@ -456,7 +440,6 @@
         "aagl": "aagl",
         "home-manager": "home-manager",
         "honkai-railway-grub-theme": "honkai-railway-grub-theme",
-        "hypr3d": "hypr3d",
         "mangowm": "mangowm",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",

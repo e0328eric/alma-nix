@@ -22,11 +22,6 @@
       url = "github:ezKEa/aagl-gtk-on-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    # Source only: built against nixpkgs' hyprland in pkgs/hypr3d.nix.
-    hypr3d = {
-      url = "github:samine825/Hypr3D";
-      flake = false;
-    };
   };
 
   outputs =
@@ -53,24 +48,25 @@
     in
     {
       overlays.default = final: prev: {
-        linuxPackages_latest = prev.linuxPackages_latest.extend (kernelFinal: kernelPrev: {
-          lenovo-legion-module = kernelPrev.lenovo-legion-module.overrideAttrs (oldAttrs: {
-            # Use Kbuild to install, strip and sign the module. The upstream
-            # installer only copies the .ko, leaving out its required .ko.cer.
-            installFlags = (oldAttrs.installFlags or [ ]) ++ [
-              "-C"
-              "${kernelFinal.kernel.dev}/lib/modules/${kernelFinal.kernel.modDirVersion}/build"
-              "M=$(PWD)"
-              "INSTALL_MOD_PATH=${placeholder "out"}"
-              "INSTALL_MOD_DIR=kernel/drivers/platform/x86"
-            ];
-            installTargets = [ "modules_install" ];
-          });
-        });
+        linuxPackages_latest = prev.linuxPackages_latest.extend (
+          kernelFinal: kernelPrev: {
+            lenovo-legion-module = kernelPrev.lenovo-legion-module.overrideAttrs (oldAttrs: {
+              # Use Kbuild to install, strip and sign the module. The upstream
+              # installer only copies the .ko, leaving out its required .ko.cer.
+              installFlags = (oldAttrs.installFlags or [ ]) ++ [
+                "-C"
+                "${kernelFinal.kernel.dev}/lib/modules/${kernelFinal.kernel.modDirVersion}/build"
+                "M=$(PWD)"
+                "INSTALL_MOD_PATH=${placeholder "out"}"
+                "INSTALL_MOD_DIR=kernel/drivers/platform/x86"
+              ];
+              installTargets = [ "modules_install" ];
+            });
+          }
+        );
 
         winetricks-git = final.callPackage ./pkgs/winetricks-git.nix { };
         protonplus-git = final.callPackage ./pkgs/protonplus.nix { };
-        hypr3d = final.callPackage ./pkgs/hypr3d.nix { src = inputs.hypr3d; };
 
         lutris-unwrapped-new = prev.lutris-unwrapped.overrideAttrs (old: rec {
           version = "0.5.22";
