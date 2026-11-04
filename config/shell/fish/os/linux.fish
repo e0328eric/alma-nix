@@ -36,7 +36,7 @@ function t
 end
 
 function l
-    ls -al $argv
+    fls -al $argv
 end
 
 function oldrm
@@ -52,7 +52,7 @@ function start
 end
 
 function ls
-    eza --icons $argv
+    fls --icons $argv
 end
 
 function o
