@@ -178,6 +178,17 @@ local suppressMaximizeRule = hl.window_rule({
 })
 -- suppressMaximizeRule:set_enabled(false)
 
+-- Keep Wine prefix initialization progress dialogs from interrupting typing.
+hl.window_rule({
+    name  = "wineboot-progress-no-focus",
+    match = { class = "(?i)^wineboot[.]exe$", title = "^Wine$" },
+
+    float = true,
+    no_initial_focus = true,
+    no_focus = true,
+    suppress_event = "maximize activate activatefocus",
+})
+
 hl.window_rule({
     -- Fix some dragging issues with XWayland
     name  = "fix-xwayland-drags",

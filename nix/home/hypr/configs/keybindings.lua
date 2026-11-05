@@ -21,6 +21,9 @@ bind({ SHIFT, "Q" },            hl.dsp.window.close())
 bind({ SHIFT, "X" },            hl.dsp.exec_cmd("noctalia msg session lock"))
 bind({ "space" },               hl.dsp.exec_cmd(var.applauncher))
 
+bind({ SHIFT, "E" },       hl.dsp.layout("colresize +conf"))
+bind({ CTRL, SHIFT, "E" }, hl.dsp.layout("colresize -conf"))
+
 -- screenshots
 bind({ "S" },        hl.dsp.exec_cmd("noctalia msg screenshot-fullscreen pick"))
 bind({ SHIFT, "S" }, hl.dsp.exec_cmd("noctalia msg screenshot-region"))
@@ -47,8 +50,6 @@ bind({ SHIFT, "down" },  hl.dsp.window.swap({ direction = "down" }))
 
 bind({ "tab" },              hl.dsp.layout("swapcol l"))
 bind({ SHIFT, "tab" },       hl.dsp.layout("swapcol r"))
-bind({ CTRL, "tab" },        hl.dsp.layout("colresize +conf"))
-bind({ CTRL, SHIFT, "tab" }, hl.dsp.layout("colresize -conf"))
 
 bind({ SHIFT, "P" }, hl.dsp.window.tag({ tag = "cursorlocked" }))
 

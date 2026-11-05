@@ -55,6 +55,10 @@ function ls
     fls --icons $argv
 end
 
+function sl
+    fls --lol $argv
+end
+
 function o
     /usr/bin/xdg-open $argv &
 end

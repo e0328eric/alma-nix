@@ -12,6 +12,13 @@
       open-floating true
   }
 
+  // Keep Wine prefix initialization progress dialogs from interrupting typing.
+  window-rule {
+      match app-id="(?i)^wineboot[.]exe$" title="^Wine$"
+      open-floating true
+      open-focused false
+  }
+
   // Global window styling
   window-rule {
       clip-to-geometry true
