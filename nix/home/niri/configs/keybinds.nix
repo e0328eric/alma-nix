@@ -27,7 +27,7 @@ let
       Mod+Ctrl+Shift+Return { spawn "${private_browser}"; }
       Mod+Space             { spawn "${applauncher}"; }
       Mod+E                 { spawn "${filemanager}"; }
-      Mod+Shift+X           { spawn "noctalia" "msg" "session" "lock"; }
+      Mod+Shift+X           { spawn "loginctl" "lock-session"; }
 
       Mod+W        { spawn "noctalia" "msg" "screenshot-fullscreen" "pick"; }
       Mod+Shift+W  { spawn "noctalia" "msg" "screenshot-region"; }

@@ -47,7 +47,7 @@ let
       bind = SUPER           , Space , spawn_shell, ${applauncher}
       bind = SUPER           , E     , spawn_shell, ${filemanager}
       bind = SUPER+SHIFT     , Q     , killclient
-      bind = SUPER+SHIFT     , X     , spawn_shell, noctalia msg session lock
+      bind = SUPER+SHIFT     , X     , spawn_shell, loginctl lock-session
 
       bind = SUPER+SHIFT     , R     , reload_config
     ''

@@ -18,7 +18,7 @@ bind({ SHIFT, "return" },       hl.dsp.exec_cmd(var.browser))
 bind({ CTRL, SHIFT, "return" }, hl.dsp.exec_cmd(var.private_browser))
 bind({ "E" },                   hl.dsp.exec_cmd(var.filemanager))
 bind({ SHIFT, "Q" },            hl.dsp.window.close())
-bind({ SHIFT, "X" },            hl.dsp.exec_cmd("noctalia msg session lock"))
+bind({ SHIFT, "X" },            hl.dsp.exec_cmd("loginctl lock-session"))
 bind({ "space" },               hl.dsp.exec_cmd(var.applauncher))
 
 bind({ SHIFT, "E" },       hl.dsp.layout("colresize +conf"))

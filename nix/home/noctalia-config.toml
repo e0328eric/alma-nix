@@ -86,9 +86,27 @@ position = "bottom"
 avatarImage = "/home/drfoobar/.face"
 radiusRatio = 0.20000000000000001
 
+# hypridle owns all automatic idle actions.
+[idle.behavior.lock]
+action = "lock"
+enabled = false
+
+[idle.behavior.screen-off]
+action = "screen_off"
+enabled = false
+
+[idle.behavior.lock-and-suspend]
+action = "lock_and_suspend"
+enabled = false
+
 [location]
 monthBeforeDay = true
 name = "Seoul, South Korea"
+
+# Let hypridle and hyprlock handle logind lock and sleep requests.
+[lockscreen]
+enabled = false
+lock_before_suspend = false
 
 [lockscreen_widgets]
 enabled = false
@@ -233,6 +251,31 @@ widget_order = [
 
 [shell.screenshot]
 confirm_region = true
+
+# Keep a lock button when Noctalia's built-in lock screen is disabled.
+[[shell.session.actions]]
+action = "command"
+label = "Lock"
+glyph = "lock"
+command = "loginctl lock-session"
+shortcut = "1"
+
+[[shell.session.actions]]
+action = "logout"
+shortcut = "2"
+
+[[shell.session.actions]]
+action = "suspend"
+shortcut = "3"
+
+[[shell.session.actions]]
+action = "reboot"
+shortcut = "4"
+
+[[shell.session.actions]]
+action = "shutdown"
+shortcut = "5"
+variant = "destructive"
 
 [theme]
 builtin = "Ayu"
