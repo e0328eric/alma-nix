@@ -41,12 +41,6 @@
     ];
   };
 
-  fileSystems."/game" = {
-    device = "/dev/disk/by-uuid/9d010077-f285-4839-b5c8-59cfeba01243";
-    fsType = "ext4";
-    options = [ "noatime" ];
-  };
-
   swapDevices = [
     { device = "/dev/disk/by-uuid/92bac781-52f7-4a8e-995e-2479d282a614"; }
   ];

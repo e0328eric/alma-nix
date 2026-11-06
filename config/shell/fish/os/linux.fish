@@ -55,6 +55,10 @@ function ls
     fls --icons $argv
 end
 
+function nnn
+    fls --tui $argv
+end
+
 function sl
     fls --lol $argv
 end
