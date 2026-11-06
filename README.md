@@ -16,6 +16,20 @@ sudo nixos-rebuild switch --flake ~/.nixos#almanixos
 nix-collect-garbage
 ```
 
+# When fstab is wrong
+Follow the instruction
+```
+cp -a /etc/fstab /etc/fstab.old
+cp -L /etc/fstab /etc/fstab.recover
+chmod u+w /etc/fstab.recover
+vim /etc/fstab.recover
+
+mv -T /etc/fstab.recover /etc/fstab
+systemctl daemon-reload
+systemctl reset-failed
+systemctl default
+```
+
 after entering user, place this folder with the name `~/.nixos`
 
 ## Gaming
@@ -273,3 +287,4 @@ journalctl --user -u linux-id -b
 systemctl --user stop linux-id
 systemctl --user start linux-id
 ```
+
